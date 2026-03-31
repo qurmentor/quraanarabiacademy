@@ -3544,21 +3544,10 @@ function updateChildrenDisplay() {
   const el = document.getElementById('childrenCount');
   if (el) el.textContent = _childrenCount;
   const note = document.querySelector('#childrenCountWrap > div:last-child');
- if (note) {
-        let discountText = '';
-
-        if (_childrenCount >= 3) {
-            discountText = '1st: 5% off · 2nd: 10% off · 3rd+: 15% off per month';
-        } else if (_childrenCount === 2) {
-            discountText = '1st: 5% off · 2nd: 10% off per month';
-        } else if (_childrenCount === 1) {
-            discountText = '1st child: 5% off per month';
-        } else {
-            discountText = 'Enrol more than one child for automatic discounts!';
-        }
-
-        note.textContent = discountText;
-    }
+  if (note) {
+    note.textContent = _childrenCount >= 3
+      ? '2nd child: 10% off · 3rd child+: 20% off per month'
+      : '2nd child: 10% off per month';
   }
 }
 
