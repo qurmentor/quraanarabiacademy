@@ -27,12 +27,65 @@ document.addEventListener('keydown', e => {
   }
 });
 
-/* ── LANGUAGE SWITCHER ── */
-function setLang(lang, btn) {
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+/* ── REAL BILINGUAL LANGUAGE SWITCHER (EN / AR) ── */
+let _activePortalView = 'calendar';
+let _activeBlogCategory = 'all';
+let _currentArticleSlug = null;
+
+function setLang(lang) {
+  const safeLang = lang === 'ar' ? 'ar' : 'en';
+  window._QAA_LANG = safeLang;
+  try { localStorage.setItem('qaa_landing_lang', safeLang); } catch (_) {}
+
+  document.documentElement.lang = safeLang;
+  document.documentElement.dir  = safeLang === 'ar' ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    const bLang = b.dataset.lang || (b.textContent.trim().toLowerCase().startsWith('en') ? 'en' : 'ar');
+    b.classList.toggle('active', bLang === safeLang);
+  });
+
+  const dict = (window._QAA_I18N && window._QAA_I18N[safeLang]) || {};
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (k && dict[k] !== undefined) el.textContent = dict[k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const k = el.getAttribute('data-i18n-html');
+    if (k && dict[k] !== undefined) el.innerHTML = dict[k];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const k = el.getAttribute('data-i18n-placeholder');
+    if (k && dict[k] !== undefined) el.setAttribute('placeholder', dict[k]);
+  });
+
+  // Update all 9 Journal cards in the active language
+  const articles = window._QAA_ARTICLES || {};
+  const readMoreTxt = dict['blog.read_more'] || (safeLang === 'ar' ? 'اقرأ المقال كاملًا' : 'Read full article');
+  document.querySelectorAll('[data-article-id]').forEach(card => {
+    const id = card.getAttribute('data-article-id');
+    const pack = articles[id] && articles[id][safeLang];
+    if (!pack) return;
+    const tagEl = card.querySelector('.blog-tag');
+    const metaEl = card.querySelector('.blog-meta');
+    const titleEl = card.querySelector('h3');
+    const pEl = card.querySelector('p');
+    const rmEl = card.querySelector('.brm-label');
+    if (tagEl) tagEl.textContent = pack.tag;
+    if (metaEl) metaEl.textContent = pack.shortMeta || pack.meta;
+    if (titleEl) titleEl.textContent = pack.title;
+    if (pEl) pEl.textContent = pack.excerpt;
+    if (rmEl) rmEl.textContent = readMoreTxt;
+  });
+
+  // Refresh Student Portal Showcase caption in active language
+  _renderPortalCaption(_activePortalView);
+
+  // If an article modal is open right now, re-render it live in the new language!
+  const modal = document.getElementById('articleModal');
+  if (modal && modal.classList.contains('open') && _currentArticleSlug) {
+    openArticle(_currentArticleSlug);
+  }
 }
 
 /* ── PRICING TOGGLE & AUTO-SELECT INTO PLACEMENT ── */
@@ -238,6 +291,20 @@ function onReferralInput(input) {
   clearTimeout(_referralDebounce);
   _referralDebounce = setTimeout(() => _lookupReferral(raw), 600);
 }
+
+// Auto-fill & live-verify ?ref=QAA-XXXXXX from a parent's invitation link
+(function initReferralFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const refParam = (params.get('ref') || params.get('referral') || '').trim().toUpperCase();
+    if (!refParam || refParam.length < 3) return;
+    const input = document.getElementById('f_referral_code');
+    if (input) {
+      input.value = refParam;
+      _lookupReferral(refParam);
+    }
+  } catch (_) {}
+})();
 
 async function _lookupReferral(code) {
   const sb = await _waitForSupabase(3000);
@@ -704,159 +771,97 @@ function updateChildrenDisplay() {
 /* ══════════════════════════════════════════════════
    PORTAL SHOWCASE — Switch Real Student Portal Views
 ══════════════════════════════════════════════════ */
+function _renderPortalCaption(view) {
+  const urlEl  = document.getElementById('portalShotUrl');
+  const capEl  = document.getElementById('portalShotCaption');
+  const isAr   = window._QAA_LANG === 'ar';
+  if (view === 'teacher') {
+    if (urlEl) urlEl.textContent = isAr
+      ? 'أكاديمية قرآن عربي · بوابة الطالب — بطاقة معلمي'
+      : 'Quraan Arabi Academy · Student Portal — My Assigned Teacher';
+    if (capEl) capEl.innerHTML = isAr
+      ? '<strong>بطاقة المعلم المعتمد وخصوصية آمنة:</strong> يطّلع الطالب وولي الأمر على مؤهلات المعلم وتخصصاته وعدد الحصص المكتملة مع تواصل مباشر وآمن مع الإدارة.'
+      : '<strong>Certified Teacher Profile &amp; Safe Privacy:</strong> Students and parents view their assigned teacher\'s academic qualifications, specialties, and completed lessons, with direct Administration messaging built right in.';
+  } else {
+    if (urlEl) urlEl.textContent = isAr
+      ? 'أكاديمية قرآن عربي · بوابة الطالب — التقويم والجدول'
+      : 'Quraan Arabi Academy · Student Portal — Calendar & Schedule';
+    if (capEl) capEl.innerHTML = isAr
+      ? '<strong>تقويم شهري تفاعلي:</strong> تابع جميع الحصص المجدولة والمباشرة والمكتملة بنظرة واحدة، مع دخول سريع للفصل وتقارير تفصيلية بعد كل حصة.'
+      : '<strong>Monthly Interactive Calendar:</strong> View all scheduled, in-progress, and completed sessions in one glance, with one-click classroom entry and post-lesson reports.';
+  }
+}
+
 function switchPortalShot(view, btn) {
+  _activePortalView = view === 'teacher' ? 'teacher' : 'calendar';
   document.querySelectorAll('.portal-tab-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   const calImg = document.getElementById('portalShotCalendar');
   const tchImg = document.getElementById('portalShotTeacher');
-  const urlEl  = document.getElementById('portalShotUrl');
-  const capEl  = document.getElementById('portalShotCaption');
-  if (view === 'teacher') {
+  if (_activePortalView === 'teacher') {
     if (calImg) calImg.classList.remove('active');
     if (tchImg) tchImg.classList.add('active');
-    if (urlEl) urlEl.textContent = 'Quraan Arabi Academy · Student Portal — My Assigned Teacher';
-    if (capEl) capEl.innerHTML = '<strong>Certified Teacher Profile &amp; Safe Privacy:</strong> Students and parents view their assigned teacher\'s academic qualifications, specialties, and completed lessons, with direct Administration messaging built right in.';
   } else {
     if (tchImg) tchImg.classList.remove('active');
     if (calImg) calImg.classList.add('active');
-    if (urlEl) urlEl.textContent = 'Quraan Arabi Academy · Student Portal — Calendar & Schedule';
-    if (capEl) capEl.innerHTML = '<strong>Monthly Interactive Calendar:</strong> View all scheduled, in-progress, and completed sessions in one glance, with one-click classroom entry and post-lesson reports.';
   }
+  _renderPortalCaption(_activePortalView);
 }
 
 /* ══════════════════════════════════════════════════
-   JOURNAL — Live Search Filter & In-Page Article Reader
+   JOURNAL — Category Filter, Bilingual Search & Modal Reader
 ══════════════════════════════════════════════════ */
+function filterBlogCategory(cat, btn) {
+  _activeBlogCategory = cat || 'all';
+  document.querySelectorAll('.jf-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  filterBlog();
+}
+
 function filterBlog(rawQuery) {
-  const q = (rawQuery || '').trim().toLowerCase();
+  const searchEl = document.getElementById('blogSearch');
+  const q = ((rawQuery !== undefined ? rawQuery : (searchEl ? searchEl.value : '')) || '').trim().toLowerCase();
   const grid = document.getElementById('blogGrid');
   const empty = document.getElementById('blogEmpty');
   if (!grid) return;
   const cards = grid.querySelectorAll('.blog-feat, .blog-card');
   let visible = 0;
   cards.forEach(card => {
+    const cat = card.dataset.category || 'all';
+    const catMatch = _activeBlogCategory === 'all' || cat === _activeBlogCategory;
     const hay = ((card.dataset.search || '') + ' ' + card.textContent).toLowerCase();
-    const match = !q || hay.includes(q);
+    const qMatch = !q || hay.includes(q);
+    const match = catMatch && qMatch;
     card.style.display = match ? '' : 'none';
     if (match) visible++;
   });
   if (empty) empty.style.display = visible === 0 ? 'block' : 'none';
 }
 
-const _journalArticles = {
-  'tajweed-5-rules': {
-    tag: 'Tajweed',
-    meta: 'March 2025 · 8 min read · Quraan Arabi Academy',
-    title: 'Why Your Tajweed Stops Here: The 5 Rules Every Student Gets Wrong',
-    body: `
-      <p>Many dedicated students complete introductory Qa'ida and Tajweed courses, yet find their recitation still sounds hesitant or imprecise. In our evaluation sessions across hundreds of learners, five subtle technical errors account for almost every plateau:</p>
-      <h4>1. Mixing Heavy (Tafkheem) and Light (Tarqeeq) Adjacent Letters</h4>
-      <p>When a light letter precedes a heavy letter—such as the <em>Lam</em> in <strong>وَلَا الضَّالِّينَ</strong> or the <em>Alif</em> after <em>Mīm</em>—students unconsciously thicken the light letter in anticipation. Mastering the independent root of the tongue resolves this immediately.</p>
-      <h4>2. Inconsistent Madd (Elongation) Counts</h4>
-      <p>Measuring 2, 4, or 6 counts requires a steady internal rhythm matched to your recitation pace (<em>Tahqeeq</em>, <em>Tadweer</em>, or <em>Hadr</em>), rather than guessing lengths differently in each verse.</p>
-      <h4>3. Over-Nasalising Non-Ghunnah Letters</h4>
-      <p>Allowing air into the nasal cavity (<em>Khayshoom</em>) during regular vowels or <em>Madd</em> letters dulls the clarity of recitation. A simple 30-second daily pinch test with a certified tutor eliminates this habit within weeks.</p>
-      <h4>4. Incomplete Qalqalah on Stopping</h4>
-      <p>Students either swallow the echo on <em>Qaf, Ta, Ba, Jeem, Dal</em> at the end of an ayah, or add an unwanted vowel sound after it. True <em>Qalqalah Kubra</em> releases cleanly without shifting toward a <em>Fathah</em>.</p>
-      <h4>5. Stopping Without Preserving Meaning (Waqf &amp; Ibtida')</h4>
-      <p>Recitation precision is inseparable from Qur'anic meaning. Knowing where to pause and where to resume transforms your reading from mechanical pronunciation into living reflection.</p>
-      <p><strong>Next step:</strong> Book your complimentary Placement Evaluation and let an Ijazah-certified tutor diagnose your exact recitation profile.</p>
-    `
-  },
-  'quranic-arabic-vs-msa': {
-    tag: 'Grammar',
-    meta: 'February 2026 · 5 min read · Quraan Arabi Academy',
-    title: "Qur'anic Arabic vs. Modern Standard: The Difference That Changes Everything",
-    body: `
-      <p>Students often spend years studying airport dialogues and newspaper headlines in Modern Standard Arabic (MSA), only to open Surah Al-Baqarah and feel completely lost. Understanding the structural difference between MSA and Classical Qur'anic Arabic saves years of misdirected effort.</p>
-      <h4>1. Vocabulary &amp; Root Depth</h4>
-      <p>Roughly 300 high-frequency Qur'anic roots account for over 70% of the vocabulary in the Mushaf. Focusing directly on Qur'anic root morphology (<em>Sarf</em>) unlocks comprehension dramatically faster than general conversational word lists.</p>
-      <h4>2. Rhetorical Word Order (Balaghah)</h4>
-      <p>While MSA relies heavily on predictable subject-verb-object patterns, the Qur'an shifts word order intentionally for emphasis, exclusivity, and spiritual resonance—such as <em>"Iyyaka na'budu"</em> ("You alone we worship").</p>
-      <h4>3. Case Endings (I'rab) Carry Essential Meaning</h4>
-      <p>In everyday MSA media, final vowel endings are frequently dropped. In the Qur'an, a single <em>Dammah</em> versus a <em>Fathah</em> distinguishes the doer from the object and anchors accurate Tafsir.</p>
-      <p><strong>Our Academy approach:</strong> Every grammar rule is taught directly through real Qur'anic verses—so every single lesson deepens your prayer and recitation from Week 1.</p>
-    `
-  },
-  'tafsir-approach': {
-    tag: 'Tafsir',
-    meta: 'November 2025 · 6 min read · Quraan Arabi Academy',
-    title: 'How to Approach Tafsir as a Non-Arabic Speaker',
-    body: `
-      <p>You do not need ten years of classical Arabic before beginning authentic, scholarly engagement with the meanings of the Qur'an. What you need is a disciplined methodology that protects you from superficial reading.</p>
-      <h4>1. Start with Short Surahs You Recite Daily</h4>
-      <p>Beginning with Juz 'Amma immediately transforms your five daily prayers. Studying the linguistic nuance of a 5-verse Surah builds deeper transformation than skimming 50 pages of translation.</p>
-      <h4>2. Anchor Every Ayah in Context (Asbab al-Nuzul &amp; Surah Theme)</h4>
-      <p>Every Surah carries a unified spiritual axis. Reading verses through authentic classical works such as <em>Tafsir al-Sa'di</em> and <em>Tafsir Ibn Kathir</em> under a guided instructor prevents isolated misinterpretations.</p>
-      <h4>3. Pair Key Arabic Terms with Reflection</h4>
-      <p>Even as an English-speaking learner, learning 3–5 core Arabic keywords per passage reveals shades of meaning that no English translation can capture in a single word.</p>
-      <p><strong>Structured guidance matters:</strong> Inside our Foundation &amp; Fluency tracks, students learn recitation alongside foundational Qur'anic understanding so heart, tongue, and intellect grow together.</p>
-    `
-  },
-  'tajweed-simplified-3-steps': {
-    tag: 'Tajweed Simplified',
-    meta: '2026 · 5 min read · Quraan Arabi Academy',
-    title: 'Reciting with Ease: A Simple 3-Step Method to Master Any New Surah',
-    body: `
-      <p>Many beginners think good Tajweed means memorising a thick textbook before opening the Mushaf. In reality, Tajweed was transmitted orally for centuries to make reciting the Qur'an <strong>easier, clearer, and more natural</strong>—never stressful.</p>
-      <h4>Step 1: Listen &amp; Trace with Your Finger (2 Minutes)</h4>
-      <p>Before attempting to pronounce a new passage on your own, listen twice to a clear, measured reciter (such as Shaykh Al-Husary) while visually following every vowel and stopping mark in the Mushaf. Your ear absorbs 70% of correct elongation and melody before your tongue even moves.</p>
-      <h4>Step 2: Slow-Motion Articulation (Focus on ONE Rule Only)</h4>
-      <p>Do not try to police twenty rules simultaneously. On your first slow read, focus solely on clean letter exits (<em>Makharij</em>) and full vowel clarity—making sure every <em>Fathah</em>, <em>Kasrah</em>, and <em>Dammah</em> is distinct without rushing.</p>
-      <h4>Step 3: Connect the Flow &amp; Lock the Rhythm</h4>
-      <p>Once individual words feel comfortable, read the verse smoothly from start to stop at a calm, unhurried pace. Repeat the verse three times cleanly before moving to the next. Three clean repetitions build stronger muscle memory than twenty rushed ones.</p>
-      <p><strong>Remember the Prophetic encouragement:</strong> The Prophet ﷺ promised a <em>double reward</em> for the believer who strives patiently to recite the Qur'an even when it feels challenging at first.</p>
-    `
-  },
-  'noon-saakinah-easy-map': {
-    tag: 'Tajweed Simplified',
-    meta: '2026 · 6 min read · Quraan Arabi Academy',
-    title: 'Noon Saakinah & Tanween Made Simple: The 4-Rule Mental Map',
-    body: `
-      <p>Almost every Tajweed syllabus starts with the rules of <strong>Noon Saakinah (نْ)</strong> and <strong>Tanween (ـً ـٍ ـٌ)</strong>—because they appear in nearly every single line of the Qur'an! Instead of getting lost in technical jargon, think of them as <strong>four simple natural sounds</strong> based on the very next letter:</p>
-      <h4>1. Say It Clearly — Izhar (الإظهار)</h4>
-      <p>When the next letter comes from the <strong>throat</strong> (ء هـ ع ح غ خ), your tongue naturally pronounces a crisp, clear <em>"N"</em> without holding any extra nasal hum. Example: <em>Min khawf</em> (مِنْ خَوْفٍ).</p>
-      <h4>2. Merge Smoothly — Idgham (الإدغام)</h4>
-      <p>When the next letter is in the word <strong>يَرْمَلُون (Y-R-M-L-W-N)</strong>, the <em>N</em> melts seamlessly into the next letter so your mouth doesn't stumble. Hold a soft 2-count hum for <em>ي ن م و</em>, and merge cleanly without a hum for <em>ل ر</em>.</p>
-      <h4>3. Flip to a Soft "M" — Iqlab (الإقلاب)</h4>
-      <p>One letter only: <strong>Baa (ب)</strong>. Try saying <em>"Min Ba'd"</em> quickly—your lips naturally want to close for <em>B</em>, so the <em>N</em> gently turns into a soft <em>M</em> with a 2-count nasal hum (<em>Mim-ba'd</em>). Even the Mushaf marks it for you with a tiny <strong>م</strong> above the letter!</p>
-      <h4>4. Hide Gently — Ikhfa (الإخفاء)</h4>
-      <p>For all remaining 15 letters, do not touch the roof of your mouth for a full <em>N</em>; instead, hover lightly in position for the upcoming letter with a gentle 2-count nasal hum.</p>
-      <p><strong>Golden Tip:</strong> Look at how logical the Arabic mouth is—every Tajweed rule exists simply to make transitions between letters smoother and more melodious!</p>
-    `
-  },
-  'smooth-madd-breath': {
-    tag: 'Tajweed Simplified',
-    meta: '2026 · 5 min read · Quraan Arabi Academy',
-    title: 'How to Stop Running Out of Breath While Reciting the Qur\'an',
-    body: `
-      <p>Running out of breath mid-ayah is one of the most common frustrations for students—and it often causes rushed vowels, shortened elongations (<em>Madd</em>), and awkward mid-word stops. Here are four effortless adjustments that change your recitation immediately:</p>
-      <h4>1. Sit Upright and Breathe from the Diaphragm</h4>
-      <p>Hunching over a phone or desk compresses your lungs by nearly a third. Raise your Mushaf or screen closer to eye level, relax your shoulders, and take a calm, silent breath through the nose before beginning each verse.</p>
-      <h4>2. Let the Mushaf's Stopping Signs Guide You (Waqf)</h4>
-      <p>You never have to finish a long verse in one heroic breath! Watch for the helpful small symbols above the line: <strong>مـ</strong> (mandatory stop), <strong>قلى</strong> (better to stop), and <strong>ج</strong> (permissible to stop). Stopping gracefully preserves both your breath and the verse's meaning.</p>
-      <h4>3. Keep Your Madd Counts Proportional to Your Pace</h4>
-      <p>A 2-count natural elongation (<em>Madd Tabee'i</em>) takes roughly the time of opening or closing one finger calmly. Don't stretch 2-count vowels into 4 counts—that silently drains half your breath before you reach the real 4- or 5-count elongations!</p>
-      <h4>4. If Breath Ends Early, Back Up 1–2 Words Cleanly</h4>
-      <p>If you must stop unexpectedly on a long ayah, simply pause cleanly with a <em>Sukoon</em> on the last word, take a calm breath, and resume from the last natural phrase—never gasp and push forward.</p>
-      <p><strong>Practice with a live guide:</strong> In our 1-on-1 sessions, your tutor coaches your exact breathing points and Waqf pauses in real time until calm, flowing recitation feels effortless.</p>
-    `
-  }
-};
-
 function openArticle(slug) {
-  const art = _journalArticles[slug];
+  const articles = window._QAA_ARTICLES || {};
+  const entry = articles[slug];
+  const lang  = window._QAA_LANG === 'ar' ? 'ar' : 'en';
+  const art   = entry && (entry[lang] || entry.en);
   const modal = document.getElementById('articleModal');
   if (!art || !modal) return;
+
+  _currentArticleSlug = slug;
+  const card = document.getElementById('amCard');
+  if (card) {
+    card.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    card.setAttribute('lang', lang);
+  }
   document.getElementById('amTag').textContent = art.tag;
   document.getElementById('amMeta').textContent = art.meta;
   document.getElementById('amTitle').textContent = art.title;
   document.getElementById('amBody').innerHTML = art.body;
   const waLink = document.getElementById('amWaLink');
   if (waLink) {
-    waLink.href = 'https://wa.me/201557864122?text=' + encodeURIComponent(
-      'Assalamu Alaikum! I just read "' + art.title + '" on Quraan Arabi Academy and would like to learn more about your programs.'
-    );
+    const waText = lang === 'ar'
+      ? 'السلام عليكم! قرأت للتو مقال «' + art.title + '» في مجلة أكاديمية قرآن عربي وأرغب في معرفة المزيد عن برامجكم.'
+      : 'Assalamu Alaikum! I just read "' + art.title + '" on Quraan Arabi Academy and would like to learn more about your programs.';
+    waLink.href = 'https://wa.me/201557864122?text=' + encodeURIComponent(waText);
   }
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -874,3 +879,8 @@ document.addEventListener('keydown', e => {
     if (modal && modal.classList.contains('open')) closeArticleModal();
   }
 });
+
+// Initialize saved language preference (EN by default, AR if user previously chose Arabic)
+if (typeof window._QAA_LANG === 'string') {
+  setLang(window._QAA_LANG);
+}

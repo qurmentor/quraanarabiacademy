@@ -14,7 +14,7 @@
 <meta property="og:image" content="assets/og-image-1200x630.png">
 <title>Quraan Arabi Academy — The Future of Qur'anic Literacy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -22,9 +22,13 @@
 <!-- ══ TOP BAR ══ -->
 <div class="top-bar">
   <div class="top-bar-left">
-    <span>Structured Qur'anic Education · Global Enrollment Open</span>
+    <span data-i18n="top.banner">Structured Qur'anic Education · Ahlul Qur'an, Ahlullah · Global Enrollment Open</span>
   </div>
   <div class="top-bar-right">
+    <div class="lang-toggle" role="group" aria-label="Language switcher">
+      <button type="button" class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button type="button" class="lang-btn" data-lang="ar" onclick="setLang('ar')">العربية</button>
+    </div>
     <a href="https://wa.me/201557864122" class="wa-link" target="_blank" rel="noopener">
       <svg width="14" height="14" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
       WhatsApp
@@ -35,19 +39,23 @@
 <!-- ══ NAV ══ -->
 <nav id="mainNav">
   <div class="nav-inner">
-    <!-- OFFICIAL BRAND KIT LOGO -->
+    <!-- OFFICIAL BRAND KIT LOGO + SIGNATURE MOTTO -->
     <a href="#" class="logo" aria-label="Quraan Arabi Academy">
       <img src="assets/logo-light-transparent.png" alt="Quraan Arabi Academy" class="nav-logo-img">
+      <div class="logo-brand-stack">
+        <span class="logo-brand-title">Quraan Arabi Academy</span>
+        <span class="logo-motto" dir="rtl" data-i18n="nav.motto">أهل القرآن أهل الله</span>
+      </div>
     </a>
     <!-- DESKTOP LINKS -->
     <ul class="nav-links">
-      <li><a href="#pedigree">The Academy</a></li>
-      <li><a href="#founder">Founder</a></li>
-      <li><a href="#pricing">Study Plans</a></li>
-      <li><a href="#blog">Journal</a></li>
+      <li><a href="#pedigree" data-i18n="nav.academy">The Academy</a></li>
+      <li><a href="#founder" data-i18n="nav.founder">Founder</a></li>
+      <li><a href="#pricing" data-i18n="nav.plans">Study Plans</a></li>
+      <li><a href="#blog" data-i18n="nav.journal">Journal</a></li>
     </ul>
     <!-- DESKTOP CTA -->
-    <a href="#placement" class="btn btn-emerald nav-cta">Placement Evaluation ↗</a>
+    <a href="#placement" class="btn btn-emerald nav-cta" data-i18n="nav.cta">Placement Evaluation ↗</a>
     <!-- HAMBURGER (mobile only) -->
     <button class="hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -65,19 +73,26 @@
       </a>
       <button class="drawer-close" onclick="toggleDrawer()" aria-label="Close menu">✕</button>
     </div>
+    <div style="padding:12px 24px 0;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <span style="font-family:'Amiri',serif;font-size:15px;font-weight:700;color:var(--emerald);" dir="rtl">أهل القرآن أهل الله</span>
+      <div class="lang-toggle lang-toggle-light" role="group" aria-label="Language switcher">
+        <button type="button" class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+        <button type="button" class="lang-btn" data-lang="ar" onclick="setLang('ar')">عربي</button>
+      </div>
+    </div>
     <ul class="drawer-nav">
-      <li><a href="#pedigree"  onclick="toggleDrawer()"><div class="dn-icon">🕌</div>The Academy</a></li>
-      <li><a href="#founder"   onclick="toggleDrawer()"><div class="dn-icon">🎓</div>Meet the Founder</a></li>
-      <li><a href="#pricing"   onclick="toggleDrawer()"><div class="dn-icon">📘</div>Study Plans</a></li>
-      <li><a href="#blog"      onclick="toggleDrawer()"><div class="dn-icon">📝</div>The Journal</a></li>
-      <li><a href="legal.html" target="_blank" rel="noopener"><div class="dn-icon">📜</div>FAQ &amp; Legal Policies</a></li>
-      <li><a href="quraanic-transformation.html"><div class="dn-icon">✦</div>Ijazah Track</a></li>
+      <li><a href="#pedigree"  onclick="toggleDrawer()"><div class="dn-icon">🕌</div><span data-i18n="drawer.academy">The Academy</span></a></li>
+      <li><a href="#founder"   onclick="toggleDrawer()"><div class="dn-icon">🎓</div><span data-i18n="drawer.founder">Meet the Founder</span></a></li>
+      <li><a href="#pricing"   onclick="toggleDrawer()"><div class="dn-icon">📘</div><span data-i18n="drawer.plans">Study Plans</span></a></li>
+      <li><a href="#blog"      onclick="toggleDrawer()"><div class="dn-icon">📝</div><span data-i18n="drawer.journal">The Journal</span></a></li>
+      <li><a href="legal.html" target="_blank" rel="noopener"><div class="dn-icon">📜</div><span data-i18n="drawer.legal">FAQ &amp; Legal Policies</span></a></li>
+      <li><a href="quraanic-transformation.html"><div class="dn-icon">✦</div><span data-i18n="drawer.ijazah">Ijazah Track</span></a></li>
     </ul>
     <div class="drawer-footer">
-      <a href="#placement" class="drawer-cta" onclick="toggleDrawer()">Placement Evaluation ↗</a>
+      <a href="#placement" class="drawer-cta" onclick="toggleDrawer()" data-i18n="drawer.cta">Placement Evaluation ↗</a>
       <a href="https://wa.me/201557864122" class="drawer-wa" target="_blank">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        Contact on WhatsApp
+        <span data-i18n="drawer.wa">Contact on WhatsApp</span>
       </a>
     </div>
   </div>
@@ -113,39 +128,43 @@
       <div>
         <div class="hero-badge">
           <div class="pulse-dot"></div>
-          Now Enrolling · Global Cohort 2026
+          <span data-i18n="hero.badge">Now Enrolling · Global Cohort 2026</span>
         </div>
-        <h1>The Future of<br><em>Qur'anic Literacy.</em></h1>
-        <div class="hero-bridge">Bridging Tradition and Excellence.</div>
-        <p>Structured Arabic and Qur'anic programs designed for the modern student. No confusion — just measurable, verified progress.</p>
+        <div class="hero-motto-crest">
+          <span class="hmc-ar" dir="rtl" data-i18n="hero.motto_ar">أَهْلُ الْقُرْآنِ أَهْلُ اللَّهِ وَخَاصَّتُهُ</span>
+          <span class="hmc-en" data-i18n="hero.motto_en">The People of the Qur'an Are the People of Allah</span>
+        </div>
+        <h1 data-i18n-html="hero.title">The Future of<br><em>Qur'anic Literacy.</em></h1>
+        <div class="hero-bridge" data-i18n="hero.bridge">Bridging Tradition and Excellence.</div>
+        <p data-i18n="hero.desc">Structured Arabic and Qur'anic programs designed for the modern student. No confusion — just measurable, verified progress.</p>
         <div class="hero-ctas">
-          <a href="#placement" class="btn btn-gold">Placement Evaluation ↗</a>
-          <a href="#pedigree" class="btn btn-ghost">Explore the Academy</a>
+          <a href="#placement" class="btn btn-gold" data-i18n="hero.cta1">Placement Evaluation ↗</a>
+          <a href="#pedigree" class="btn btn-ghost" data-i18n="hero.cta2">Explore the Academy</a>
         </div>
         <div class="hero-stats">
           <div>
             <div class="hero-stat-n">35+</div>
-            <div class="hero-stat-l">Students</div>
+            <div class="hero-stat-l" data-i18n="hero.stat1">Students</div>
           </div>
           <div>
             <div class="hero-stat-n">4+</div>
-            <div class="hero-stat-l">Certified Tutors</div>
+            <div class="hero-stat-l" data-i18n="hero.stat2">Certified Tutors</div>
           </div>
           <div>
             <div class="hero-stat-n">3</div>
-            <div class="hero-stat-l">Study Tracks</div>
+            <div class="hero-stat-l" data-i18n="hero.stat3">Study Tracks</div>
           </div>
           <div>
             <div class="hero-stat-n">2</div>
-            <div class="hero-stat-l">Languages</div>
+            <div class="hero-stat-l" data-i18n="hero.stat4">Languages</div>
           </div>
         </div>
       </div>
       <div>
         <div class="hero-card">
           <div class="hcard-head">
-            <div class="hcard-title">Your Study Dashboard</div>
-            <div class="hcard-badge">In Progress</div>
+            <div class="hcard-title" data-i18n="hero.card_title">Your Study Dashboard</div>
+            <div class="hcard-badge" data-i18n="hero.card_badge">In Progress</div>
           </div>
           <div class="lesson-list">
             <div class="lesson-row done">
@@ -175,7 +194,7 @@
           </div>
           <div class="prog-wrap">
             <div class="prog-labels">
-              <span>Weekly Progress</span>
+              <span data-i18n="hero.card_prog">Weekly Progress</span>
               <span>72%</span>
             </div>
             <div class="prog-bar"><div class="prog-fill"></div></div>
@@ -192,26 +211,26 @@
   <div class="container">
     <div class="pedigree-header">
       <div>
-        <div class="eyebrow reveal">The Standards</div>
-        <h2 class="section-title reveal">Academy <em>Pedigree.</em><br>Built on Certainty.</h2>
+        <div class="eyebrow reveal" data-i18n="ped.eye">The Standards</div>
+        <h2 class="section-title reveal" data-i18n-html="ped.title">Academy <em>Pedigree.</em><br>Built on Certainty.</h2>
       </div>
-      <p class="section-sub reveal d1">Every instructor, every lesson plan, and every program is engineered with one goal: measurable, lasting Qur'anic progress anchored in scholarly authenticity.</p>
+      <p class="section-sub reveal d1" data-i18n="ped.sub">Every instructor, every lesson plan, and every program is engineered with one goal: measurable, lasting Qur'anic progress anchored in scholarly authenticity.</p>
     </div>
     <div class="pedigree-grid">
       <div class="ped-card reveal">
         <div class="ped-icon">🎓</div>
-        <h3>Ijazah-Certified Tutors</h3>
-        <p>Every instructor holds an unbroken chain of transmission — Sanad — back to the Prophet ﷺ. The gold standard of Qur'anic authority.</p>
+        <h3 data-i18n="ped.c1_t">Ijazah-Certified Tutors</h3>
+        <p data-i18n="ped.c1_p">Every instructor holds an unbroken chain of transmission — Sanad — back to the Prophet ﷺ. The gold standard of Qur'anic authority.</p>
       </div>
       <div class="ped-card reveal d1">
         <div class="ped-icon">📊</div>
-        <h3>Structured Progress Reports</h3>
-        <p>Detailed lesson reports after every single class track recitation accuracy, memorisation, revision, Tajweed rules, and homework. Never guess where you stand.</p>
+        <h3 data-i18n="ped.c2_t">Structured Progress Reports</h3>
+        <p data-i18n="ped.c2_p">Detailed lesson reports after every single class track recitation accuracy, memorisation, revision, Tajweed rules, and homework. Never guess where you stand.</p>
       </div>
       <div class="ped-card reveal d2">
         <div class="ped-icon">🌍</div>
-        <h3>Multilingual Delivery</h3>
-        <p>Programs fully delivered in English and Arabic. Every nuance of the sacred text understood with precision, regardless of background.</p>
+        <h3 data-i18n="ped.c3_t">Multilingual Delivery</h3>
+        <p data-i18n="ped.c3_p">Programs fully delivered in English and Arabic. Every nuance of the sacred text understood with precision, regardless of background.</p>
       </div>
     </div>
   </div>
@@ -233,17 +252,17 @@
         </div>
       </div>
       <div class="founder-content">
-        <div class="eyebrow reveal">Founder's Corner</div>
-        <h2 class="section-title reveal">Meet the <em>Mentor</em> <br>Behind the Vision.</h2>
-        <div class="founder-quote reveal d1">
+        <div class="eyebrow reveal" data-i18n="founder.eye">Founder's Corner</div>
+        <h2 class="section-title reveal" data-i18n-html="founder.title">Meet the <em>Mentor</em> <br>Behind the Vision.</h2>
+        <div class="founder-quote reveal d1" data-i18n="founder.quote">
           "True Qur'anic literacy is not memorisation alone — it is precision, understanding, embodiment, and a living relationship with the Words of Allah."
         </div>
-        <p class="founder-bio reveal d2">
+        <p class="founder-bio reveal d2" data-i18n="founder.bio">
           Mohamed Abdul-Maqsoud is an Imam, Khateeb, and certified reciter, specialising in advanced Tajweed and Tafsir methodology. With over a decade of structured teaching and Da'wah experience across three continents, he founded Quraan Arabi Academy to deliver rigorous, systemised, and high-credibility Qur'anic education for serious students seeking mastery — not casual learning.
         </p>
 
         <div style="margin-bottom:6px;" class="reveal d2">
-          <div style="font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Academic &amp; Scholarly Credentials</div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;" data-i18n="founder.cred_h">Academic &amp; Scholarly Credentials</div>
           <div class="credentials-list">
             <div class="cred-item">Preparatory Master's Program in Comparative Islamic Jurisprudence — Al-Azhar University</div>
             <div class="cred-item">Bachelor of Shari'a and Law, English Department — Al-Azhar University</div>
@@ -253,14 +272,14 @@
         </div>
 
         <div style="margin-bottom:32px;" class="reveal d3">
-          <div style="font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Publications</div>
-          <div class="cred-item">
+          <div style="font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;" data-i18n="founder.pub_h">Publications</div>
+          <div class="cred-item" data-i18n="founder.pub_p">
             Author of three forthcoming Arabic and Qur'anic study workbooks — currently in development
           </div>
         </div>
 
         <div class="reveal d3">
-          <a href="quraanic-transformation.html" class="btn btn-gold">Apply for the Ijazah Track ↗</a>
+          <a href="quraanic-transformation.html" class="btn btn-gold" data-i18n="founder.cta">Apply for the Ijazah Track ↗</a>
         </div>
       </div>
     </div>
@@ -272,12 +291,12 @@
 <section class="dashboard" id="dashboard">
   <div class="container">
     <div class="dash-header reveal">
-      <div class="eyebrow" style="justify-content:center;">Student Experience</div>
-      <h2 class="section-title" style="text-align:center;">Your <em>Structured</em> Learning Environment.</h2>
-      <p class="section-sub">A real, dedicated Student &amp; Parent Portal that keeps every family organised — with interactive lesson calendars, assigned teacher profiles, post-lesson reports, verified certificates, and private admin messaging.</p>
+      <div class="eyebrow" style="justify-content:center;" data-i18n="dash.eye">Student Experience</div>
+      <h2 class="section-title" style="text-align:center;" data-i18n-html="dash.title">Your <em>Structured</em> Learning Environment.</h2>
+      <p class="section-sub" data-i18n="dash.sub">A real, dedicated Student &amp; Parent Portal that keeps every family organised — with interactive lesson calendars, assigned teacher profiles, post-lesson reports, verified certificates, and private admin messaging.</p>
       <div class="portal-tab-bar" role="tablist" aria-label="Student Portal Views">
-        <button type="button" class="portal-tab-btn active" onclick="switchPortalShot('calendar', this)">📅 Interactive Lessons Calendar</button>
-        <button type="button" class="portal-tab-btn" onclick="switchPortalShot('teacher', this)">👨‍🏫 Assigned Teacher Profile</button>
+        <button type="button" class="portal-tab-btn active" onclick="switchPortalShot('calendar', this)" data-i18n="dash.tab1">📅 Interactive Lessons Calendar</button>
+        <button type="button" class="portal-tab-btn" onclick="switchPortalShot('teacher', this)" data-i18n="dash.tab2">👨‍🏫 Assigned Teacher Profile</button>
       </div>
     </div>
     <div class="dash-mockup reveal">
@@ -307,14 +326,14 @@
 
     <!-- Emotional headline block -->
     <div class="prog-hero-headline reveal">
-      <div class="eyebrow" style="justify-content:center;">Academic Pathways</div>
-      <h2>How Serious Are You About Your<br><em>Qur'anic Journey?</em></h2>
-      <p>Your progress depends on your commitment. Choose the pathway that reflects your intention and let us guide you through a structured, scholarly transformation.</p>
+      <div class="eyebrow" style="justify-content:center;" data-i18n="pricing.eye">Academic Pathways</div>
+      <h2 data-i18n-html="pricing.title">How Serious Are You About Your<br><em>Qur'anic Journey?</em></h2>
+      <p data-i18n="pricing.sub">Your progress depends on your commitment. Choose the pathway that reflects your intention and let us guide you through a structured, scholarly transformation.</p>
       <!-- Session toggle -->
       <div style="display:flex;justify-content:center;">
         <div class="toggle-wrap">
-          <button class="tog-btn active" onclick="setPricing('60',this)">60-Minute Sessions</button>
-          <button class="tog-btn" onclick="setPricing('30',this)">30-Minute Sessions</button>
+          <button class="tog-btn active" onclick="setPricing('60',this)" data-i18n="pricing.t60">60-Minute Sessions</button>
+          <button class="tog-btn" onclick="setPricing('30',this)" data-i18n="pricing.t30">30-Minute Sessions</button>
         </div>
       </div>
     </div>
@@ -324,12 +343,12 @@
 
       <!-- ── PATHWAY 1: Foundation ── -->
       <div class="pathway-card reveal">
-        <div class="path-num">Pathway 1</div>
-        <div class="path-name">Foundation Path</div>
-        <div class="path-sub">For Beginners &amp; Structured Learners</div>
-        <div class="path-desc">Build strong foundations in pronunciation, Tajweed, and confident recitation through a carefully structured curriculum designed for long-term mastery.</div>
+        <div class="path-num" data-i18n="pricing.p1_num">Pathway 1</div>
+        <div class="path-name" data-i18n="pricing.p1_name">Foundation Path</div>
+        <div class="path-sub" data-i18n="pricing.p1_sub">For Beginners &amp; Structured Learners</div>
+        <div class="path-desc" data-i18n="pricing.p1_desc">Build strong foundations in pronunciation, Tajweed, and confident recitation through a carefully structured curriculum designed for long-term mastery.</div>
 
-        <div class="intensity-label">Choose your weekly intensity</div>
+        <div class="intensity-label" data-i18n="pricing.p1_int">Choose your weekly intensity</div>
         <!-- 60-min options (shown by default) -->
         <select class="path-select" data-path="1" data-session="60">
           <option value="foundation-60-1">1 session/week — $52/mo · $13.00/session</option>
@@ -350,19 +369,19 @@
           <li><span class="chk">✓</span>Direct student support channel</li>
           <li><span class="chk">✓</span>Level assessment upon enrolment</li>
         </ul>
-        <button type="button" class="path-cta em" onclick="selectPathwayAndScroll(1)">
+        <button type="button" class="path-cta em" onclick="selectPathwayAndScroll(1)" data-i18n="pricing.p1_cta">
           Begin Your Foundation Journey →
         </button>
       </div>
 
       <!-- ── PATHWAY 2: Fluency ── -->
       <div class="pathway-card reveal d1">
-        <div class="path-num">Pathway 2</div>
-        <div class="path-name">Fluency Path</div>
-        <div class="path-sub">For Committed &amp; Serious Learners</div>
-        <div class="path-desc">Designed for students seeking accelerated development, Tajweed precision, and preparation for advanced Qur'anic study.</div>
+        <div class="path-num" data-i18n="pricing.p2_num">Pathway 2</div>
+        <div class="path-name" data-i18n="pricing.p2_name">Fluency Path</div>
+        <div class="path-sub" data-i18n="pricing.p2_sub">For Committed &amp; Serious Learners</div>
+        <div class="path-desc" data-i18n="pricing.p2_desc">Designed for students seeking accelerated development, Tajweed precision, and preparation for advanced Qur'anic study.</div>
 
-        <div class="intensity-label">Choose your commitment level</div>
+        <div class="intensity-label" data-i18n="pricing.p2_int">Choose your commitment level</div>
         <!-- 60-min options -->
         <select class="path-select" data-path="2" data-session="60">
           <option value="fluency-60-3">3 sessions/week — $126/mo · $10.50/session</option>
@@ -386,22 +405,22 @@
           <li><span class="chk">✓</span>Structured Ijazah pathway preparation</li>
           <li><span class="chk">✓</span>Academic performance tracking</li>
         </ul>
-        <button type="button" class="path-cta em" onclick="selectPathwayAndScroll(2)">
+        <button type="button" class="path-cta em" onclick="selectPathwayAndScroll(2)" data-i18n="pricing.p2_cta">
           Advance to Fluency →
         </button>
       </div>
 
       <!-- ── PATHWAY 3: Ijazah (Elite) ── -->
       <div class="pathway-card elite-card reveal d2">
-        <div class="path-num">Pathway 3</div>
-        <div class="path-name">Ijazah Track</div>
-        <div class="path-sub">Founder's Elite — By Application Only</div>
-        <div class="path-desc">A private scholarly mentorship for students seeking certified Qur'anic transmission (Sanad) under direct supervision of the Founder.</div>
+        <div class="path-num" data-i18n="pricing.p3_num">Pathway 3</div>
+        <div class="path-name" data-i18n="pricing.p3_name">Ijazah Track</div>
+        <div class="path-sub" data-i18n="pricing.p3_sub">Founder's Elite — By Application Only</div>
+        <div class="path-desc" data-i18n="pricing.p3_desc">A private scholarly mentorship for students seeking certified Qur'anic transmission (Sanad) under direct supervision of the Founder.</div>
 
         <div class="by-application">
           <div class="by-app-badge">
             <div class="dot"></div>
-            By Application Only
+            <span data-i18n="pricing.p3_badge">By Application Only</span>
           </div>
         </div>
 
@@ -415,10 +434,10 @@
           <li><span class="chk">✓</span>Priority scheduling</li>
           <li><span class="chk">✓</span>Formal Ijazah certification upon successful completion</li>
         </ul>
-        <a href="quraanic-transformation.html" class="path-cta gd" onclick="window.location.href='quraanic-transformation.html';return false;">
+        <a href="quraanic-transformation.html" class="path-cta gd" onclick="window.location.href='quraanic-transformation.html';return false;" data-i18n="pricing.p3_cta">
           Apply for Mentorship ↗
         </a>
-        <div class="elite-note">Application reviewed personally by Mentor Mohamed Abdul-Maqsoud. Limited placements.</div>
+        <div class="elite-note" data-i18n="pricing.p3_note">Application reviewed personally by Mentor Mohamed Abdul-Maqsoud. Limited placements.</div>
       </div>
 
     </div>
@@ -431,9 +450,9 @@
   <div class="container">
 
     <div class="discounts-head reveal">
-      <div class="eyebrow">More Than a Lesson — A Family Legacy</div>
-      <h2>When a Family Learns Together,<br><em>They Grow Together.</em></h2>
-      <p>We believe Qur'anic education is a family affair — not just a transaction. That's why we've built a programme that rewards families who commit together, because the impact multiplies when everyone grows.</p>
+      <div class="eyebrow" data-i18n="disc.eye">More Than a Lesson — A Family Legacy</div>
+      <h2 data-i18n-html="disc.title">When a Family Learns Together,<br><em>They Grow Together.</em></h2>
+      <p data-i18n="disc.sub">We believe Qur'anic education is a family affair — not just a transaction. That's why we've built a programme that rewards families who commit together, because the impact multiplies when everyone grows.</p>
     </div>
 
     <div class="discounts-grid">
@@ -544,7 +563,7 @@
 
     </div>
 
-    <p class="discounts-note reveal">
+    <p class="discounts-note reveal" data-i18n-html="disc.note">
       <strong>Applies to Foundation and Fluency Paths only.</strong> Discounts are applied upon verification of enrolment. Contact us via WhatsApp to activate your family or referral discount. Loyalty Reward is applied automatically after 12 uninterrupted months.
     </p>
 
@@ -560,119 +579,198 @@
   <div class="container">
     <div class="blog-head reveal">
       <div>
-        <div class="eyebrow">Resource Hub</div>
-        <h2 class="section-title">The Academy <em>Journal.</em></h2>
+        <div class="eyebrow" data-i18n="blog.eye">Resource Hub · Bilingual EN &amp; AR</div>
+        <h2 class="section-title" data-i18n-html="blog.title">The Academy <em>Journal.</em></h2>
       </div>
-      <div class="search-bar">
-        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" opacity=".4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input id="blogSearch" type="text" placeholder="Search articles, topics…" oninput="filterBlog(this.value)" aria-label="Search journal articles">
+      <div class="journal-controls">
+        <div class="lang-toggle lang-toggle-light" role="group" aria-label="Journal language switcher">
+          <button type="button" class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+          <button type="button" class="lang-btn" data-lang="ar" onclick="setLang('ar')">العربية</button>
+        </div>
+        <div class="search-bar">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" opacity=".4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="blogSearch" type="text" placeholder="Search Tajweed, Arabic, Tafsir, Morning/Evening/Sleep Du'as…" data-i18n-placeholder="blog.search" oninput="filterBlog()" aria-label="Search journal articles">
+        </div>
       </div>
     </div>
+
+    <div class="journal-filters reveal" role="tablist" aria-label="Filter journal articles by topic">
+      <button type="button" class="jf-btn active" data-cat="all" onclick="filterBlogCategory('all', this)" data-i18n="blog.f_all">All Articles (9)</button>
+      <button type="button" class="jf-btn" data-cat="adhkar" onclick="filterBlogCategory('adhkar', this)" data-i18n="blog.f_adhkar">Islamic &amp; Du'as</button>
+      <button type="button" class="jf-btn" data-cat="tajweed" onclick="filterBlogCategory('tajweed', this)" data-i18n="blog.f_tajweed">Tajweed &amp; Recitation</button>
+      <button type="button" class="jf-btn" data-cat="arabic" onclick="filterBlogCategory('arabic', this)" data-i18n="blog.f_arabic">Arabic &amp; Tafsir</button>
+    </div>
+
     <div class="blog-grid" id="blogGrid">
-      <div class="blog-feat reveal" data-search="tajweed rules makharij sifaat madd ghunnah recitation" onclick="openArticle('tajweed-5-rules')" style="cursor:pointer;" role="button" tabindex="0">
+      <!-- 1. Morning Adhkar -->
+      <div class="blog-card reveal" data-article-id="morning-adhkar-guide" data-category="adhkar" data-search="morning adhkar dua islamic sabah protection barakah ayat al-kursi istighfar أذكار الصباح دعاء إسلاميات" onclick="openArticle('morning-adhkar-guide')" style="cursor:pointer;" role="button" tabindex="0">
+        <div class="blog-img">
+          <div class="blog-img-inner bi-4">🌅</div>
+          <div class="blog-overlay"></div>
+          <div class="blog-tag">Islamic &amp; Du'as</div>
+          <div class="blog-lang">EN · عربي</div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">2026 · 6 min read</div>
+          <h3>Morning Adhkar (أذكار الصباح): Your Daily Shield of Barakah &amp; Protection</h3>
+          <p>Essential authentic Prophetic morning supplications — with Arabic text, transliteration, meaning, and why starting your day with remembrance transforms everything.</p>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+
+      <!-- 2. Evening Adhkar -->
+      <div class="blog-card reveal d1" data-article-id="evening-adhkar-guide" data-category="adhkar" data-search="evening adhkar dua islamic masa protection peace sakina gratitude أذكار المساء دعاء سكينة" onclick="openArticle('evening-adhkar-guide')" style="cursor:pointer;" role="button" tabindex="0">
+        <div class="blog-img">
+          <div class="blog-img-inner bi-5">🌆</div>
+          <div class="blog-overlay"></div>
+          <div class="blog-tag">Islamic &amp; Du'as</div>
+          <div class="blog-lang">EN · عربي</div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">2026 · 6 min read</div>
+          <h3>Evening Adhkar (أذكار المساء): Closing Your Day in Peace, Gratitude &amp; Protection</h3>
+          <p>Recited between Asr and Maghrib, these authentic evening supplications dissolve the day's stress, protect your household, and refill your heart with Sakina.</p>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+
+      <!-- 3. Before Sleeping Du'as -->
+      <div class="blog-card reveal d2" data-article-id="sleep-duas-prophetic-night" data-category="adhkar" data-search="sleep sleeping bed night dua adhkar prophetic routine protection baqarah tasbih أذكار النوم قبل النوم" onclick="openArticle('sleep-duas-prophetic-night')" style="cursor:pointer;" role="button" tabindex="0">
+        <div class="blog-img">
+          <div class="blog-img-inner bi-6">🌌</div>
+          <div class="blog-overlay"></div>
+          <div class="blog-tag">Islamic &amp; Du'as</div>
+          <div class="blog-lang">EN · عربي</div>
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">2026 · 7 min read</div>
+          <h3>Before Sleeping Du'as (أذكار النوم): The Prophetic Night Routine for Peaceful Sleep</h3>
+          <p>The authentic Sunnah steps before sleep — and why keeping Morning, Evening, and Sleep Adhkar daily builds an unbreakable shield of Sakina and closeness to Allah.</p>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+
+      <!-- 4. Tajweed 5 Rules -->
+      <div class="blog-feat reveal" data-article-id="tajweed-5-rules" data-category="tajweed" data-search="tajweed rules makharij sifaat madd ghunnah recitation تجويد مخارج صفات مدود غنة" onclick="openArticle('tajweed-5-rules')" style="cursor:pointer;" role="button" tabindex="0">
         <div class="blog-img">
           <div class="blog-img-inner bi-1">📿</div>
           <div class="blog-overlay"></div>
           <div class="blog-tag">Tajweed</div>
-          <div class="blog-lang">EN · AR</div>
+          <div class="blog-lang">EN · عربي</div>
         </div>
         <div class="blog-body">
           <div class="blog-meta">March 2025 · 8 min read</div>
           <h3>Why Your Tajweed Stops Here: The 5 Rules Every Student Gets Wrong</h3>
-          <p>Most students plateau after the basics. We break down the five most misunderstood Tajweed rules that tutors rarely address — and the precise method to correct each one within 30 days of focused practice.</p>
-          <div class="blog-read-more">Read full article <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <p>Most students plateau after the basics. We break down the five most misunderstood Tajweed rules that tutors rarely address — and how to fix each one cleanly.</p>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </div>
-      <div class="blog-card reveal d1" data-search="grammar arabic quranic modern standard fusha nahw" onclick="openArticle('quranic-arabic-vs-msa')" style="cursor:pointer;" role="button" tabindex="0">
+
+      <!-- 5. Qur'anic Arabic vs MSA -->
+      <div class="blog-card reveal d1" data-article-id="quranic-arabic-vs-msa" data-category="arabic" data-search="grammar arabic quranic modern standard fusha nahw نحو عربية قرآنية فصحى" onclick="openArticle('quranic-arabic-vs-msa')" style="cursor:pointer;" role="button" tabindex="0">
         <div class="blog-img">
           <div class="blog-img-inner bi-2">✍️</div>
           <div class="blog-overlay"></div>
           <div class="blog-tag">Grammar</div>
-          <div class="blog-lang">EN</div>
+          <div class="blog-lang">EN · عربي</div>
         </div>
         <div class="blog-body">
           <div class="blog-meta">Feb 2026 · 5 min read</div>
           <h3>Qur'anic Arabic vs. Modern Standard: The Difference That Changes Everything</h3>
-          <p>Understanding this distinction could cut your learning timeline significantly.</p>
-          <div class="blog-read-more">Read full article <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <p>Understanding the structural difference between Modern Standard Arabic and Classical Qur'anic Arabic can save you years of misdirected effort.</p>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </div>
-      <div class="blog-card reveal d2" data-search="tafsir exegesis reflection understanding non-arabic speakers" onclick="openArticle('tafsir-approach')" style="cursor:pointer;" role="button" tabindex="0">
+
+      <!-- 6. Tafsir Approach -->
+      <div class="blog-card reveal d2" data-article-id="tafsir-approach" data-category="arabic" data-search="tafsir exegesis reflection understanding non-arabic speakers تفسير تدبر فهم القرآن" onclick="openArticle('tafsir-approach')" style="cursor:pointer;" role="button" tabindex="0">
         <div class="blog-img">
           <div class="blog-img-inner bi-3">🌙</div>
           <div class="blog-overlay"></div>
           <div class="blog-tag">Tafsir</div>
-          <div class="blog-lang">AR · EN</div>
+          <div class="blog-lang">EN · عربي</div>
         </div>
         <div class="blog-body">
           <div class="blog-meta">Nov 2025 · 6 min read</div>
           <h3>How to Approach Tafsir as a Non-Arabic Speaker</h3>
-          <p>A structured methodology for engaging classical exegesis without full fluency — and why it works.</p>
-          <div class="blog-read-more">Read full article <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <p>A structured methodology for engaging authentic classical exegesis without needing ten years of Arabic first — and why it transforms your prayer.</p>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </div>
-      <div class="blog-card reveal" data-search="tajweed simplified easy recitation 3-step method surah practice beginner" onclick="openArticle('tajweed-simplified-3-steps')" style="cursor:pointer;" role="button" tabindex="0">
+
+      <!-- 7. Tajweed Simplified 3 Steps -->
+      <div class="blog-card reveal" data-article-id="tajweed-simplified-3-steps" data-category="tajweed" data-search="tajweed simplified easy recitation 3-step method surah practice beginner تيسير التجويد تلاوة سهلة" onclick="openArticle('tajweed-simplified-3-steps')" style="cursor:pointer;" role="button" tabindex="0">
         <div class="blog-img">
           <div class="blog-img-inner bi-1">🌿</div>
           <div class="blog-overlay"></div>
           <div class="blog-tag">Tajweed Simplified</div>
-          <div class="blog-lang">EN · AR</div>
+          <div class="blog-lang">EN · عربي</div>
         </div>
         <div class="blog-body">
           <div class="blog-meta">2026 · 5 min read</div>
           <h3>Reciting with Ease: A Simple 3-Step Method to Master Any New Surah</h3>
           <p>Stop feeling overwhelmed by dozens of rules at once. Follow this practical 3-step recitation routine to read smoothly and confidently.</p>
-          <div class="blog-read-more">Read full article <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </div>
-      <div class="blog-card reveal d1" data-search="tajweed simplified noon saakinah tanween izhar idgham iqlab ikhfa easy map" onclick="openArticle('noon-saakinah-easy-map')" style="cursor:pointer;" role="button" tabindex="0">
+
+      <!-- 8. Noon Saakinah Map -->
+      <div class="blog-card reveal d1" data-article-id="noon-saakinah-easy-map" data-category="tajweed" data-search="tajweed simplified noon saakinah tanween izhar idgham iqlab ikhfa easy map نون ساكنة تنوين إظهار إدغام إقلاب إخفاء" onclick="openArticle('noon-saakinah-easy-map')" style="cursor:pointer;" role="button" tabindex="0">
         <div class="blog-img">
           <div class="blog-img-inner bi-2">🗺️</div>
           <div class="blog-overlay"></div>
           <div class="blog-tag">Tajweed Simplified</div>
-          <div class="blog-lang">EN · AR</div>
+          <div class="blog-lang">EN · عربي</div>
         </div>
         <div class="blog-body">
           <div class="blog-meta">2026 · 6 min read</div>
           <h3>Noon Saakinah &amp; Tanween Made Simple: The 4-Rule Mental Map</h3>
           <p>Most students memorise charts and still freeze while reading. Here is the 2-minute visual map that makes Izhar, Idgham, Iqlab, and Ikhfa second nature.</p>
-          <div class="blog-read-more">Read full article <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </div>
-      <div class="blog-card reveal d2" data-search="tajweed simplified breath breathing waqf stopping madd rhythm smooth recitation" onclick="openArticle('smooth-madd-breath')" style="cursor:pointer;" role="button" tabindex="0">
+
+      <!-- 9. Smooth Madd & Breath -->
+      <div class="blog-card reveal d2" data-article-id="smooth-madd-breath" data-category="tajweed" data-search="tajweed simplified breath breathing waqf stopping madd rhythm smooth recitation نفس وقف مدود تلاوة" onclick="openArticle('smooth-madd-breath')" style="cursor:pointer;" role="button" tabindex="0">
         <div class="blog-img">
           <div class="blog-img-inner bi-3">✨</div>
           <div class="blog-overlay"></div>
           <div class="blog-tag">Tajweed Simplified</div>
-          <div class="blog-lang">EN · AR</div>
+          <div class="blog-lang">EN · عربي</div>
         </div>
         <div class="blog-body">
           <div class="blog-meta">2026 · 5 min read</div>
           <h3>How to Stop Running Out of Breath While Reciting the Qur'an</h3>
           <p>Simple breathing habits, Mushaf stopping signs (Waqf), and steady Madd timing that turn rushed reading into calm, effortless recitation.</p>
-          <div class="blog-read-more">Read full article <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          <div class="blog-read-more"><span class="brm-label">Read full article</span> <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </div>
     </div>
-    <p id="blogEmpty" style="display:none;text-align:center;color:var(--charcoal-lite);margin-top:24px;font-size:14px;">No journal articles match your search. Try "Tajweed", "Grammar", or "Tafsir".</p>
+    <p id="blogEmpty" style="display:none;text-align:center;color:var(--charcoal-lite);margin-top:24px;font-size:14px;" data-i18n="blog.empty">No journal articles match your search. Try "Tajweed", "Adhkar", "Morning", or "Sleep".</p>
   </div>
 </section>
 
 <!-- ══ JOURNAL ARTICLE READER MODAL ══ -->
 <div class="article-modal" id="articleModal" role="dialog" aria-modal="true" aria-labelledby="amTitle" onclick="if(event.target===this) closeArticleModal()">
-  <div class="article-modal-card">
+  <div class="article-modal-card" id="amCard">
     <div class="article-modal-head">
       <div>
         <span class="article-modal-tag" id="amTag">Tajweed</span>
         <span class="article-modal-meta" id="amMeta"></span>
       </div>
-      <button type="button" class="article-modal-close" onclick="closeArticleModal()" aria-label="Close article">✕</button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="lang-toggle lang-toggle-light" role="group" aria-label="Article language switcher">
+          <button type="button" class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+          <button type="button" class="lang-btn" data-lang="ar" onclick="setLang('ar')">عربي</button>
+        </div>
+        <button type="button" class="article-modal-close" onclick="closeArticleModal()" aria-label="Close article">✕</button>
+      </div>
     </div>
     <h2 class="article-modal-title" id="amTitle"></h2>
     <div class="article-modal-body" id="amBody"></div>
     <div class="article-modal-foot">
-      <a href="#placement" class="btn btn-emerald" onclick="closeArticleModal()">Book Placement Evaluation ↗</a>
-      <a id="amWaLink" href="https://wa.me/201557864122" target="_blank" rel="noopener" class="btn btn-gold">Discuss on WhatsApp</a>
+      <a href="#placement" class="btn btn-emerald" onclick="closeArticleModal()" data-i18n="modal.book">Book Placement Evaluation ↗</a>
+      <a id="amWaLink" href="https://wa.me/201557864122" target="_blank" rel="noopener" class="btn btn-gold" data-i18n="modal.wa">Discuss on WhatsApp</a>
     </div>
   </div>
 </div>
@@ -682,15 +780,15 @@
 <section class="placement" id="placement">
   <div class="container">
     <div style="text-align:center;margin-bottom:48px;" class="reveal">
-      <div class="eyebrow" style="justify-content:center;">Begin Your Journey</div>
-      <h2 class="section-title">Placement <em>Evaluation.</em></h2>
-      <p class="section-sub" style="margin:14px auto 0;text-align:center;">A complimentary assessment reviewed personally by our instructors. Takes 5 minutes.</p>
+      <div class="eyebrow" style="justify-content:center;" data-i18n="place.eye">Begin Your Journey</div>
+      <h2 class="section-title" data-i18n-html="place.title">Placement <em>Evaluation.</em></h2>
+      <p class="section-sub" style="margin:14px auto 0;text-align:center;" data-i18n="place.sub">A complimentary assessment reviewed personally by our instructors. Takes 5 minutes.</p>
     </div>
     <div class="placement-wrap reveal">
       <div class="form-head">
         <div class="form-head-inner">
-          <div class="form-title">Your Academic Assessment</div>
-          <div class="form-subtitle">Reviewed personally by our certified instructors. Placement results within 48 hours.</div>
+          <div class="form-title" data-i18n="place.form_t">Your Academic Assessment</div>
+          <div class="form-subtitle" data-i18n="place.form_s">Reviewed personally by our certified instructors. Placement results within 48 hours.</div>
           <div class="progress-track" id="stepTrack">
             <div class="prog-step active" data-step="1">
               <div class="step-circle">1</div>
@@ -923,7 +1021,7 @@
               <input
                 id="f_referral_code"
                 type="text"
-                placeholder="e.g. AHMED2024"
+                placeholder="e.g. QAA-K7M4P2"
                 maxlength="30"
                 autocomplete="off"
                 oninput="onReferralInput(this)"
@@ -1082,11 +1180,11 @@
 
 <!-- ══ CTA BANNER ══ -->
 <section class="cta-banner">
-  <h2 reveal>Begin Your<br><em>Qur'anic Journey</em> Today.</h2>
-  <p reveal>Book your complimentary placement evaluation. Our certified instructors will design a personalised programme around your goals, schedule, and current level.</p>
-  <div class="cta-btns" reveal>
-    <a href="#placement" class="btn btn-gold">Book My Placement Evaluation ↗</a>
-    <a href="https://wa.me/201557864122" class="btn btn-ghost" target="_blank">Chat on WhatsApp</a>
+  <h2 class="reveal" data-i18n-html="cta.title">Begin Your<br><em>Qur'anic Journey</em> Today.</h2>
+  <p class="reveal" data-i18n="cta.sub">Book your complimentary placement evaluation. Our certified instructors will design a personalised programme around your goals, schedule, and current level.</p>
+  <div class="cta-btns reveal">
+    <a href="#placement" class="btn btn-gold" data-i18n="cta.b1">Book My Placement Evaluation ↗</a>
+    <a href="https://wa.me/201557864122" class="btn btn-ghost" target="_blank" data-i18n="cta.b2">Chat on WhatsApp</a>
   </div>
 </section>
 
@@ -1099,23 +1197,25 @@
         <a href="#" class="logo footer-logo-link" aria-label="Quraan Arabi Academy">
           <img src="assets/logo-dark.png" alt="Quraan Arabi Academy" class="footer-logo-img">
         </a>
-        <p>Structured Qur'anic education anchored in scholarly authenticity and delivered with modern precision. For serious students everywhere.</p>
+        <p data-i18n="foot.desc">Structured Qur'anic education anchored in scholarly authenticity and delivered with modern precision. For serious students everywhere.</p>
+        <div class="footer-motto" dir="rtl" data-i18n="foot.motto">✦ أهل القرآن أهل الله · People of the Qur'an, People of Allah ✦</div>
+      </div>
       <div class="footer-col">
-        <h4>The Academy</h4>
+        <h4 data-i18n="foot.col1">The Academy</h4>
         <a href="#pedigree">Our Standards</a>
         <a href="#founder">Meet the Founder</a>
         <a href="#dashboard">Student Experience</a>
         <a href="legal.html" target="_blank" rel="noopener">FAQ &amp; Legal</a>
       </div>
       <div class="footer-col">
-        <h4>Programs</h4>
+        <h4 data-i18n="foot.col2">Programs</h4>
         <a href="#pricing">Foundation Path</a>
         <a href="#pricing">Fluency Path</a>
         <a href="quraanic-transformation.html">Ijazah Track — Elite</a>
         <a href="#placement">Placement Evaluation</a>
       </div>
       <div class="footer-col">
-        <h4>Resources</h4>
+        <h4 data-i18n="foot.col3">Resources</h4>
         <a href="#blog">The Journal</a>
         <a href="https://wa.me/201557864122" target="_blank" rel="noopener">WhatsApp</a>
         <a href="legal.html#privacy" target="_blank" rel="noopener">Privacy Policy</a>
@@ -1123,8 +1223,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025-2027 Quraan Arabi Academy. All rights reserved.</span>
-      
+      <span data-i18n="foot.copy">© 2025–2027 Quraan Arabi Academy · Ahlul Qur'an, Ahlullah. All rights reserved.</span>
       <span><a href="legal.html#terms" target="_blank">Terms</a> · <a href="legal.html#privacy" target="_blank">Privacy</a> · <a href="https://wa.me/201557864122" target="_blank">Contact</a></span>
     </div>
   </div>
@@ -1144,9 +1243,10 @@
 
 
 <!-- ══════════════════════════════════════════════════════════
-     SUPABASE PUBLIC CLIENT — Admissions Pipeline & Private Storage
+     SUPABASE PUBLIC CLIENT + BILINGUAL JOURNAL ENGINE + MAIN LOGIC
 ════════════════════════════════════════════════════════════ -->
 <script src="js/supabase-init.js"></script>
+<script src="js/journal-i18n.js"></script>
 <script src="js/main.js"></script>
 
 </body>

@@ -1909,3 +1909,240 @@ footer {
     padding-right: 0;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREMIUM MODERN POLISH · SIGNATURE MOTTO · BILINGUAL JOURNAL · DU'A BOXES
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* Navbar Signature Brand Stack */
+.logo-brand-stack {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.18;
+  padding-left: 10px;
+  border-left: 1px solid rgba(212, 175, 55, 0.35);
+}
+html[dir="rtl"] .logo-brand-stack {
+  padding-left: 0;
+  padding-right: 10px;
+  border-left: none;
+  border-right: 1px solid rgba(212, 175, 55, 0.35);
+}
+.logo-brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--emerald);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.logo-motto {
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #a88318;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+@media (max-width: 1060px) {
+  .logo-brand-title { display: none; }
+}
+@media (max-width: 520px) {
+  .logo-brand-stack { display: none; }
+}
+
+/* Royal Hero Motto Crest */
+.hero-motto-crest {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 18px;
+  padding: 10px 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.hmc-ar {
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: clamp(18px, 2.2vw, 23px);
+  font-weight: 700;
+  color: var(--gold-light);
+  line-height: 1.45;
+  text-shadow: 0 2px 14px rgba(212, 175, 55, 0.25);
+}
+.hmc-en {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Footer Signature Motto */
+.footer-motto {
+  margin-top: 8px;
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.02em;
+}
+
+/* Light-surface Language Toggle (Journal / Mobile Drawer / Modal) */
+.lang-toggle-light {
+  background: rgba(4, 57, 39, 0.06);
+  border: 1px solid rgba(4, 57, 39, 0.18);
+}
+.lang-toggle-light .lang-btn {
+  color: var(--emerald);
+  opacity: 0.72;
+}
+.lang-toggle-light .lang-btn.active {
+  background: var(--emerald);
+  color: var(--gold-light);
+  opacity: 1;
+  box-shadow: 0 3px 10px rgba(4, 57, 39, 0.22);
+}
+
+/* Journal Controls & Category Filter Pills */
+.journal-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.journal-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.jf-btn {
+  border: 1px solid rgba(4, 57, 39, 0.16);
+  background: var(--white);
+  color: var(--charcoal-mid);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 999px;
+  transition: var(--t);
+  box-shadow: 0 2px 8px rgba(4, 57, 39, 0.04);
+}
+.jf-btn:hover {
+  border-color: var(--gold);
+  color: var(--emerald);
+  transform: translateY(-1px);
+}
+.jf-btn.active {
+  background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-mid) 100%);
+  color: var(--gold-light);
+  border-color: var(--emerald);
+  box-shadow: 0 6px 18px rgba(4, 57, 39, 0.22);
+}
+
+/* Jewel-tone Cover Gradients for Morning, Evening & Night Adhkar Articles */
+.bi-4 {
+  background: linear-gradient(135deg, #0b4a33 0%, #9b7320 55%, #d4af37 100%);
+}
+.bi-5 {
+  background: linear-gradient(135deg, #07291e 0%, #1c3a57 58%, #8f6b24 100%);
+}
+.bi-6 {
+  background: linear-gradient(135deg, #03150e 0%, #0b2c3d 55%, #164838 100%);
+}
+
+/* Mushaf-inspired Du'a Calligraphy Boxes Inside Article Reader Modal */
+.dua-box {
+  margin: 14px 0 18px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: linear-gradient(150deg, #fcfaf2 0%, #f5efe0 100%);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-inline-start: 4px solid var(--emerald);
+  box-shadow: 0 6px 20px rgba(4, 57, 39, 0.06);
+}
+.dua-ar {
+  font-family: 'Amiri', 'IBM Plex Sans Arabic', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 2;
+  color: var(--emerald);
+  text-align: right;
+  margin-bottom: 8px;
+}
+.dua-tr {
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 600;
+  color: #8a6914;
+  margin-bottom: 6px;
+}
+.dua-en {
+  font-size: 13.5px;
+  color: var(--charcoal-mid);
+  line-height: 1.65;
+}
+
+/* Modern Luxury Elevation & Subtle Gold Border Polish */
+.ped-card,
+.pathway-card,
+.disc-card,
+.blog-card,
+.blog-feat {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s ease;
+}
+.ped-card:hover,
+.pathway-card:hover,
+.disc-card:hover,
+.blog-card:hover,
+.blog-feat:hover {
+  border-color: rgba(212, 175, 55, 0.55);
+  box-shadow: 0 22px 54px rgba(4, 57, 39, 0.13);
+}
+.hero-card {
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(212, 175, 55, 0.25);
+}
+
+/* Full RTL Arabic Typography & Alignment Polish */
+html[dir="rtl"] body,
+html[dir="rtl"] .btn,
+html[dir="rtl"] .section-title,
+html[dir="rtl"] .hero h1,
+html[dir="rtl"] .prog-hero-headline h2,
+html[dir="rtl"] .discounts-head h2,
+html[dir="rtl"] .cta-banner h2,
+html[dir="rtl"] .article-modal-title,
+html[dir="rtl"] .article-modal-body h4 {
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  letter-spacing: 0 !important;
+}
+html[dir="rtl"] .eyebrow {
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+html[dir="rtl"] .hmc-en {
+  letter-spacing: 0;
+  text-transform: none;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-size: 12.5px;
+}
+html[dir="rtl"] .blog-read-more svg {
+  transform: rotate(180deg);
+}
+html[dir="rtl"] .article-modal-tag {
+  margin-right: 0;
+  margin-left: 10px;
+}
+html[dir="rtl"] .footer-bottom {
+  padding-right: 0;
+  padding-left: 84px;
+}
+@media (max-width: 600px) {
+  html[dir="rtl"] .footer-bottom {
+    padding-left: 0;
+  }
+}
