@@ -685,91 +685,8 @@ button { font-family: inherit; cursor: pointer; }
     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
     Back to Academy
   </a>
-  <a href="index.html" class="back-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185 76" fill="none"
-     class="logo-svg-hero" aria-label="Quraan Arabi Academy"
-     style="height:62px;width:auto;">
-  <defs>
-    <linearGradient id="gG" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"   stop-color="#edd86a"/>
-      <stop offset="50%"  stop-color="#D4AF37"/>
-      <stop offset="100%" stop-color="#b8952a"/>
-    </linearGradient>
-    <linearGradient id="eG" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#0c6644"/>
-      <stop offset="100%" stop-color="#032b1c"/>
-    </linearGradient>
-    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
-      <feGaussianBlur stdDeviation="1.8" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="drop" x="-8%" y="-8%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#021a0d" flood-opacity="0.3"/>
-    </filter>
-  </defs>
-
-  <!-- ══ EMBLEM — octagon with ع (Ain) ══ -->
-  <g filter="url(#drop)">
-    <!-- Outer octagon -->
-    <path d="M17 4 L33 4 L43 14 L43 36 L33 46 L17 46 L7 36 L7 14 Z"
-          fill="url(#eG)" stroke="url(#gG)" stroke-width="1.4"/>
-    <!-- Decorative inner circle -->
-    <circle cx="25" cy="25" r="11.5" fill="none" stroke="url(#gG)"
-            stroke-width="0.7" opacity="0.5"/>
-    <!-- Four compass tick marks -->
-    <line x1="25" y1="13.5" x2="25" y2="16.5" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
-    <line x1="25" y1="33.5" x2="25" y2="36.5" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
-    <line x1="13.5" y1="25" x2="16.5" y2="25" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
-    <line x1="33.5" y1="25" x2="36.5" y2="25" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
-    <!-- Corner accent dots -->
-    <circle cx="25" cy="5.5"  r="1.4" fill="#D4AF37" opacity="0.9"/>
-    <circle cx="25" cy="44.5" r="1.4" fill="#D4AF37" opacity="0.9"/>
-    <circle cx="8.5"  cy="25" r="1.4" fill="#D4AF37" opacity="0.9"/>
-    <circle cx="41.5" cy="25" r="1.4" fill="#D4AF37" opacity="0.9"/>
-    <!-- Arabic ع (Ain) — symbolises العربية -->
-    <text x="25" y="33"
-          font-family="IBM Plex Sans Arabic, Noto Naskh Arabic, serif"
-          font-size="18" font-weight="700"
-          fill="url(#gG)"
-          text-anchor="middle"
-          filter="url(#glow)">ع</text>
-  </g>
-
-  <!-- ══ LINE 1 — "Quraa" + gold ن ══ -->
-  <text x="55" y="28"
-        font-family="Georgia, Playfair Display, Times New Roman, serif"
-        font-size="27" font-weight="700" fill="rgba(255,255,255,0.92)"
-        letter-spacing="-0.5">Quraa</text>
-  <!-- Arabic ن shifted right to follow "Quraa" -->
-  <text x="138" y="26"
-        font-family="IBM Plex Sans Arabic, Noto Naskh Arabic, serif"
-        font-size="30" font-weight="700"
-        fill="url(#gG)" filter="url(#glow)"
-        unicode-bidi="embed" direction="ltr">ن</text>
-
-  <!-- ══ LINE 2 — "Arab" + gold ي ══ -->
-  <text x="55" y="52"
-        font-family="Georgia, Playfair Display, Times New Roman, serif"
-        font-size="21" font-weight="700" fill="rgba(255,255,255,0.92)"
-        letter-spacing="-0.3">Arab</text>
-  <!-- Arabic ي — gold -->
-  <text x="103" y="50"
-        font-family="IBM Plex Sans Arabic, Noto Naskh Arabic, serif"
-        font-size="23" font-weight="700"
-        fill="url(#gG)" filter="url(#glow)"
-        unicode-bidi="embed" direction="ltr">ي</text>
-
-  <!-- ══ LINE 3 — "ACADEMY" under Arabي ══ -->
-  <text x="55" y="67"
-        font-family="Montserrat, Arial, sans-serif"
-        font-size="7.5" font-weight="800"
-        letter-spacing="3.8"
-        fill="#D4AF37">ACADEMY</text>
-
-  <!-- Thin gold rule above ACADEMY -->
-  <line x1="55" y1="56" x2="160" y2="56"
-        stroke="#D4AF37" stroke-width="0.45" opacity="0.3"/>
-</svg>
+  <a href="index.html" class="back-logo" aria-label="Quraan Arabi Academy">
+    <img src="assets/logo-dark.png" alt="Quraan Arabi Academy" style="height:52px;width:auto;object-fit:contain;display:block;">
   </a>
 </div>
 
@@ -996,73 +913,73 @@ button { font-family: inherit; cursor: pointer; }
 
         <div class="qt-field-row">
           <div class="qt-field">
-            <label>Full Name</label>
-            <input type="text" placeholder="Your full name">
+            <label>Full Name *</label>
+            <input id="qt_name" type="text" placeholder="Your full name" required>
           </div>
           <div class="qt-field">
             <label>Profession / Background</label>
-            <input type="text" placeholder="e.g. Imam, Teacher, Physician…">
+            <input id="qt_profession" type="text" placeholder="e.g. Imam, Teacher, Physician…">
           </div>
         </div>
 
         <div class="qt-field-row">
           <div class="qt-field">
-            <label>Email Address</label>
-            <input type="email" placeholder="your@email.com">
+            <label>Email Address *</label>
+            <input id="qt_email" type="email" placeholder="your@email.com" required>
           </div>
           <div class="qt-field">
-            <label>WhatsApp Number</label>
-            <input type="tel" placeholder="+1 (555) 000-0000">
+            <label>WhatsApp Number *</label>
+            <input id="qt_whatsapp" type="tel" placeholder="+1 (555) 000-0000" required>
           </div>
         </div>
 
         <div class="qt-field">
           <label>Country of Residence</label>
-          <input type="text" placeholder="e.g. Canada, France, Egypt…">
+          <input id="qt_country" type="text" placeholder="e.g. Canada, France, Egypt…">
         </div>
 
         <div class="qt-divider"></div>
 
         <div class="qt-field">
           <label>Qur'an Memorisation Level</label>
-          <select>
-            <option>— Select your Hifz level —</option>
-            <option>Less than 5 Juz</option>
-            <option>5–10 Juz</option>
-            <option>10–20 Juz</option>
-            <option>20–29 Juz</option>
-            <option>Complete Hafiz (30 Juz)</option>
+          <select id="qt_hifz">
+            <option value="">— Select your Hifz level —</option>
+            <option value="lt5">Less than 5 Juz</option>
+            <option value="5-10">5–10 Juz</option>
+            <option value="10-20">10–20 Juz</option>
+            <option value="20-29">20–29 Juz</option>
+            <option value="30">Complete Hafiz (30 Juz)</option>
           </select>
         </div>
 
         <div class="qt-field">
           <label>Tajweed Proficiency</label>
-          <select>
-            <option>— Select your level —</option>
-            <option>Intermediate — reads fluently, Tajweed needs refinement</option>
-            <option>Advanced — solid Tajweed foundation, seeking polish</option>
-            <option>Near-certified — previously studied under a Sheikh</option>
+          <select id="qt_tajweed">
+            <option value="">— Select your level —</option>
+            <option value="intermediate">Intermediate — reads fluently, Tajweed needs refinement</option>
+            <option value="advanced">Advanced — solid Tajweed foundation, seeking polish</option>
+            <option value="near-certified">Near-certified — previously studied under a Sheikh</option>
           </select>
         </div>
 
         <div class="qt-field">
           <label>Islamic Studies Background</label>
-          <textarea placeholder="Detail your prior Islamic education — institutions, subjects studied, any scholarly mentorship received…"></textarea>
+          <textarea id="qt_bg" placeholder="Detail your prior Islamic education — institutions, subjects studied, any scholarly mentorship received…"></textarea>
         </div>
 
         <div class="qt-field">
           <label>Your Motivation for Seeking Ijazah</label>
-          <textarea placeholder="Why are you seeking a certified Ijazah? What does this mean to you in your scholarly and spiritual journey?"></textarea>
+          <textarea id="qt_motivation" placeholder="Why are you seeking a certified Ijazah? What does this mean to you in your scholarly and spiritual journey?"></textarea>
         </div>
 
         <div class="qt-divider"></div>
 
         <div class="qt-upload" onclick="this.querySelector('input').click()" style="margin-bottom:14px;">
-          <input type="file" accept="audio/*" style="display:none">
+          <input id="qt_audio" type="file" accept="audio/*" style="display:none" onchange="document.getElementById('qtAudioStatus').textContent = this.files[0] ? ' · ✓ ' + this.files[0].name : ''">
           <div class="qt-upload-icon">🎙️</div>
           <div class="qt-upload-text">Upload Recitation Audio</div>
-          <div class="qt-upload-sub">Recite any Surah or passage — MP3, WAV, M4A</div>
-          <div class="qt-upload-req">REQUIRED — Reviewed personally by the Founder</div>
+          <div class="qt-upload-sub">Recite any Surah or passage — MP3, WAV, M4A (max 15 MB)</div>
+          <div class="qt-upload-req">RECOMMENDED — Reviewed personally by the Founder <span id="qtAudioStatus" style="color:#4ade80;"></span></div>
         </div>
 
         <div class="qt-submit-section">
@@ -1075,8 +992,12 @@ button { font-family: inherit; cursor: pointer; }
       <div class="qt-success" id="qtSuccess">
         <div class="qt-success-icon">✦</div>
         <div class="qt-success-title">Application Received.</div>
+        <div id="qtSuccessRef" style="display:none;margin:10px auto 16px;padding:8px 18px;border-radius:999px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.4);color:var(--gold);font-weight:700;font-size:13px;letter-spacing:0.06em;width:fit-content;"></div>
         <div class="qt-success-msg">JazakAllahu Khairan. Your application has been submitted and will be reviewed personally by Mentor Mohamed Abdul-Maqsoud within 72 hours. You will receive a private, detailed response with the Founder's assessment and next steps.</div>
-        <a href="index.html" class="btn-gold-solid">Return to Academy →</a>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a id="qtSuccessWa" href="https://wa.me/201557864122" target="_blank" rel="noopener" class="btn-gold-solid">Confirm on WhatsApp ↗</a>
+          <a href="index.html" class="btn-ghost-light">Return to Academy →</a>
+        </div>
       </div>
     </div>
   </div>
@@ -1085,10 +1006,9 @@ button { font-family: inherit; cursor: pointer; }
 <!-- ── FOOTER STRIP ── -->
 <footer class="qt-footer">
   <div class="qt-footer-logo">
-    <div class="back-logo-mark">ق</div>
-    <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.65);">Quraan Arabi Academy</div>
+    <img src="assets/logo-dark.png" alt="Quraan Arabi Academy" style="height:44px;width:auto;object-fit:contain;">
   </div>
-  <p>© 2025 Quraan Arabi Academy · <a href="index.html">← Return to Academy</a> · <a href="#">Privacy Policy</a></p>
+  <p>© 2026 Quraan Arabi Academy · <a href="index.html">← Return to Academy</a> · <a href="legal.html#privacy" target="_blank" rel="noopener">Privacy Policy</a></p>
 </footer>
 
 <!-- WhatsApp Float -->
@@ -1106,11 +1026,103 @@ const revObs = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
 revEls.forEach(el => revObs.observe(el));
 
-// Form submit
-function submitQT() {
-  document.getElementById('qtFormBody').style.display = 'none';
-  document.querySelector('.qt-form-header').style.display = 'none';
-  document.getElementById('qtSuccess').style.display = 'block';
+// Form submit → Supabase Placement & Ijazah Pipeline
+async function submitQT() {
+  const $ = id => document.getElementById(id);
+  const fullName   = $('qt_name')?.value.trim() || '';
+  const email      = $('qt_email')?.value.trim() || '';
+  const whatsapp   = $('qt_whatsapp')?.value.trim() || '';
+  const profession = $('qt_profession')?.value.trim() || '';
+  const country    = $('qt_country')?.value.trim() || '';
+  const hifzLevel  = $('qt_hifz')?.value || '';
+  const tajweed    = $('qt_tajweed')?.value || '';
+  const islamicBg  = $('qt_bg')?.value.trim() || '';
+  const motivation = $('qt_motivation')?.value.trim() || '';
+  const audioFile  = $('qt_audio')?.files?.[0] || null;
+
+  if (fullName.length < 2) { alert('Please enter your full name.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
+  if (whatsapp.length < 6) { alert('Please enter a valid WhatsApp number.'); return; }
+  if (audioFile && audioFile.size > 15 * 1024 * 1024) {
+    alert('Audio file is too large. Maximum size is 15 MB.');
+    return;
+  }
+
+  const sb = window._QAA_SUPABASE;
+  if (!sb) {
+    alert('Connection not ready yet. Please wait 2 seconds or refresh the page and try again.');
+    return;
+  }
+
+  const btn = document.querySelector('.btn-qt-submit');
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span style="opacity:0.75">⏳ Submitting application…</span>'; }
+
+  try {
+    const appId = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = (Math.random() * 16) | 0;
+          return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+        });
+
+    let audioPath = null;
+    let audioName = null;
+    if (audioFile) {
+      if (btn) btn.innerHTML = '<span style="opacity:0.75">⏳ Uploading recitation audio…</span>';
+      const safeName = String(audioFile.name || 'recitation.mp3').replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 80);
+      audioPath = `submissions/${appId}/audio-${Date.now()}-${safeName}`;
+      audioName = audioFile.name;
+      const { error: upErr } = await sb.storage
+        .from('placement-media')
+        .upload(audioPath, audioFile, { upsert: false, contentType: audioFile.type || 'audio/mpeg' });
+      if (upErr) throw upErr;
+    }
+
+    if (btn) btn.innerHTML = '<span style="opacity:0.75">⏳ Saving application…</span>';
+    const { data, error } = await sb.rpc('submit_placement_application', {
+      p_application_id:   appId,
+      p_full_name:        fullName,
+      p_profession:       profession || null,
+      p_plan_code:        'ijazah-track',
+      p_plan_label:       "Founder's Ijazah Track (Elite Mentorship)",
+      p_phone:            whatsapp,
+      p_whatsapp:         whatsapp,
+      p_email:            email,
+      p_country:          country || null,
+      p_timezone:         Intl.DateTimeFormat().resolvedOptions().timeZone || null,
+      p_recitation_level: tajweed || null,
+      p_audio_path:       audioPath,
+      p_audio_name:       audioName,
+      p_ijazah_track:     true,
+      p_islamic_bg:       islamicBg || null,
+      p_hifz_level:       hifzLevel || null,
+      p_motivation:       motivation || null,
+      p_source:           'ijazah_page',
+    });
+
+    if (error) throw error;
+
+    const refCode = data?.reference_code || '';
+    const refEl = $('qtSuccessRef');
+    if (refEl && refCode) {
+      refEl.textContent = 'Reference Code: ' + refCode;
+      refEl.style.display = 'inline-block';
+    }
+    const waEl = $('qtSuccessWa');
+    if (waEl) {
+      const msg = `Assalamu Alaikum,\nI have just submitted my Founder's Ijazah Track application.\nName: ${fullName}${refCode ? '\nReference Code: ' + refCode : ''}`;
+      waEl.href = 'https://wa.me/201557864122?text=' + encodeURIComponent(msg);
+    }
+
+    $('qtFormBody').style.display = 'none';
+    document.querySelector('.qt-form-header').style.display = 'none';
+    $('qtSuccess').style.display = 'block';
+  } catch (err) {
+    console.error('Supabase Ijazah submission error:', err);
+    if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
+    alert('Submission failed. Please try again or contact us on WhatsApp.');
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -1188,5 +1200,8 @@ function submitQT() {
 
 })();
 </script>
+<!-- ══ SUPABASE PUBLIC CLIENT — Admissions Pipeline ══ -->
+<script src="js/supabase-init.js"></script>
+
 </body>
 </html>

@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Referral validation (consider moving to a minimal "referralCodes" collection)
+    match /partners/{id} { allow read: if true; allow write: if false; }
+    // Website form: create-only
+    match /leads/{id}    { allow create: if true; allow read, update, delete: if false; }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
