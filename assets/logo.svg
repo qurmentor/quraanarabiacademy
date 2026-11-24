@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185 76" fill="none">
+  <defs>
+    <linearGradient id="gG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#edd86a"/>
+      <stop offset="50%"  stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#b8952a"/>
+    </linearGradient>
+    <linearGradient id="eG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#0c6644"/>
+      <stop offset="100%" stop-color="#032b1c"/>
+    </linearGradient>
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="1.8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="drop" x="-8%" y="-8%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#021a0d" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- ══ EMBLEM — octagon with ع (Ain) ══ -->
+  <g filter="url(#drop)">
+    <!-- Outer octagon -->
+    <path d="M17 4 L33 4 L43 14 L43 36 L33 46 L17 46 L7 36 L7 14 Z"
+          fill="url(#eG)" stroke="url(#gG)" stroke-width="1.4"/>
+    <!-- Decorative inner circle -->
+    <circle cx="25" cy="25" r="11.5" fill="none" stroke="url(#gG)"
+            stroke-width="0.7" opacity="0.5"/>
+    <!-- Four compass tick marks -->
+    <line x1="25" y1="13.5" x2="25" y2="16.5" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
+    <line x1="25" y1="33.5" x2="25" y2="36.5" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
+    <line x1="13.5" y1="25" x2="16.5" y2="25" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
+    <line x1="33.5" y1="25" x2="36.5" y2="25" stroke="#D4AF37" stroke-width="0.9" opacity="0.65"/>
+    <!-- Corner accent dots -->
+    <circle cx="25" cy="5.5"  r="1.4" fill="#D4AF37" opacity="0.9"/>
+    <circle cx="25" cy="44.5" r="1.4" fill="#D4AF37" opacity="0.9"/>
+    <circle cx="8.5"  cy="25" r="1.4" fill="#D4AF37" opacity="0.9"/>
+    <circle cx="41.5" cy="25" r="1.4" fill="#D4AF37" opacity="0.9"/>
+    <!-- Arabic ع (Ain) — symbolises العربية -->
+    <text x="25" y="33"
+          font-family="IBM Plex Sans Arabic, Noto Naskh Arabic, serif"
+          font-size="18" font-weight="700"
+          fill="url(#gG)"
+          text-anchor="middle"
+          filter="url(#glow)">ع</text>
+  </g>
+
+  <!-- ══ LINE 1 — "Quraa" + gold ن ══ -->
+  <text x="55" y="28"
+        font-family="Georgia, Playfair Display, Times New Roman, serif"
+        font-size="27" font-weight="700" fill="#032b1c"
+        letter-spacing="-0.5">Quraa</text>
+  <!-- Arabic ن shifted right to follow "Quraa" -->
+  <text x="138" y="26"
+        font-family="IBM Plex Sans Arabic, Noto Naskh Arabic, serif"
+        font-size="30" font-weight="700"
+        fill="url(#gG)" filter="url(#glow)"
+        unicode-bidi="embed" direction="ltr">ن</text>
+
+  <!-- ══ LINE 2 — "Arab" + gold ي ══ -->
+  <text x="55" y="52"
+        font-family="Georgia, Playfair Display, Times New Roman, serif"
+        font-size="21" font-weight="700" fill="#032b1c"
+        letter-spacing="-0.3">Arab</text>
+  <!-- Arabic ي — gold -->
+  <text x="103" y="50"
+        font-family="IBM Plex Sans Arabic, Noto Naskh Arabic, serif"
+        font-size="23" font-weight="700"
+        fill="url(#gG)" filter="url(#glow)"
+        unicode-bidi="embed" direction="ltr">ي</text>
+
+  <!-- ══ LINE 3 — "ACADEMY" under Arabي ══ -->
+  <text x="55" y="67"
+        font-family="Montserrat, Arial, sans-serif"
+        font-size="7.5" font-weight="800"
+        letter-spacing="3.8"
+        fill="#D4AF37">ACADEMY</text>
+
+  <!-- Thin gold rule above ACADEMY -->
+  <line x1="55" y1="56" x2="160" y2="56"
+        stroke="#D4AF37" stroke-width="0.45" opacity="0.3"/>
+</svg>
