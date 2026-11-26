@@ -884,3 +884,25 @@ document.addEventListener('keydown', e => {
 if (typeof window._QAA_LANG === 'string') {
   setLang(window._QAA_LANG);
 }
+
+/* ── 1-CLICK COPY HELPER FOR OFFICIAL EMAILS & PHONE ── */
+function copyContactText(text, btn) {
+  const isAr = window._QAA_LANG === 'ar';
+  const prev = btn ? btn.textContent : '';
+  const showDone = () => {
+    if (!btn) return;
+    btn.textContent = isAr ? '✓ تم النسخ' : '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = prev;
+      btn.classList.remove('copied');
+    }, 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(showDone).catch(() => {
+      window.prompt(isAr ? 'انسخ النص:' : 'Copy:', text);
+    });
+  } else {
+    window.prompt(isAr ? 'انسخ النص:' : 'Copy:', text);
+  }
+}
