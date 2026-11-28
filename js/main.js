@@ -81,6 +81,12 @@ function setLang(lang) {
   // Refresh Student Portal Showcase caption in active language
   _renderPortalCaption(_activePortalView);
 
+  // Refresh Interactive Architectural Widgets in active language
+  if (typeof renderHeroTrack === 'function') renderHeroTrack(_activeHeroTrack);
+  if (typeof selectRoadmapStage === 'function') selectRoadmapStage(_activeRoadmapStage);
+  if (typeof selectReachHub === 'function') selectReachHub(_activeReachHub);
+  if (typeof updateFamilyCalculator === 'function') updateFamilyCalculator();
+
   // If an article modal is open right now, re-render it live in the new language!
   const modal = document.getElementById('articleModal');
   if (modal && modal.classList.contains('open') && _currentArticleSlug) {
@@ -160,7 +166,7 @@ function markField(el, valid) {
 function checkInput(el) { return el && el.value.trim() !== ''; }
 function checkSelect(el) { return el && el.value !== ''; }
 function checkEmail(el) { return el && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim()); }
-function checkAge(el) { const v = parseInt(el.value); return !isNaN(v) && v >= 5 && v <= 100; }
+function checkAge(el) { const v = parseInt(el.value); return !isNaN(v) && v >= 2 && v <= 100; }
 function checkPhone(el) { return el && el.value.trim().length >= 7; }
 
 /* ══════════════════════════════════════════════════
@@ -214,7 +220,7 @@ function validateStep1() {
   let errors = [];
 
   if (!checkInput(name))   { markField(name, false);  errors.push('Full Name'); }       else markField(name, true);
-  if (!checkAge(age))      { markField(age, false);   errors.push('Age (5–100)'); }     else markField(age, true);
+  if (!checkAge(age))      { markField(age, false);   errors.push('Age (2–100)'); }     else markField(age, true);
   if (!checkInput(goals))  { markField(goals, false); errors.push('Study Goals'); }     else markField(goals, true);
   if (!checkSelect(dur))   { markField(dur, false);   errors.push('Session Duration'); }else markField(dur, true);
   if (!checkSelect(plan))  { markField(plan, false);  errors.push('Preferred Plan'); }  else markField(plan, true);
@@ -880,10 +886,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Initialize saved language preference (EN by default, AR if user previously chose Arabic)
-if (typeof window._QAA_LANG === 'string') {
-  setLang(window._QAA_LANG);
-}
+// Language initialization runs at the very bottom after all interactive modules are defined.
 
 /* ── 1-CLICK COPY HELPER FOR OFFICIAL EMAILS & PHONE ── */
 function copyContactText(text, btn) {
@@ -905,4 +908,707 @@ function copyContactText(text, btn) {
   } else {
     window.prompt(isAr ? 'انسخ النص:' : 'Copy:', text);
   }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ARCHITECTURAL INTERACTIVE ENGINES
+   (Scroll Bar · Hero Constellation · Hero Telemetry · 4-Stage Roadmap ·
+    Global Reach Map · Animated Counters · Family Savings Calculator)
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. TOP SCROLL PROGRESS BAR */
+(function initScrollProgress() {
+  const bar = document.getElementById('scrollProgressBar');
+  if (!bar) return;
+  const update = () => {
+    const h = document.documentElement;
+    const max = (h.scrollHeight - h.clientHeight) || 1;
+    bar.style.width = Math.min(100, Math.max(0, (window.scrollY / max) * 100)).toFixed(1) + '%';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+/* 2. LIGHTWEIGHT HERO GEOMETRIC CONSTELLATION CANVAS */
+(function initHeroCanvas() {
+  const canvas = document.getElementById('heroGeoCanvas');
+  if (!canvas) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = 0, height = 0, nodes = [], running = true;
+  const mouse = { x: -999, y: -999 };
+
+  const resize = () => {
+    const rect = canvas.parentElement ? canvas.parentElement.getBoundingClientRect() : { width: window.innerWidth, height: 700 };
+    width = canvas.width = Math.max(320, Math.floor(rect.width));
+    height = canvas.height = Math.max(420, Math.floor(rect.height));
+    const count = Math.min(34, Math.max(16, Math.floor(width / 46)));
+    nodes = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.28,
+      vy: (Math.random() - 0.5) * 0.28,
+      r: Math.random() * 1.8 + 1.1
+    }));
+  };
+
+  const heroEl = canvas.parentElement;
+  if (heroEl) {
+    heroEl.addEventListener('mousemove', e => {
+      const r = heroEl.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+    }, { passive: true });
+    heroEl.addEventListener('mouseleave', () => { mouse.x = -999; mouse.y = -999; });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(entries => {
+        running = entries[0] && entries[0].isIntersecting;
+      }, { threshold: 0.05 }).observe(heroEl);
+    }
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  const tick = () => {
+    if (running) {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        a.x += a.vx; a.y += a.vy;
+        if (a.x < 0 || a.x > width) a.vx *= -1;
+        if (a.y < 0 || a.y > height) a.vy *= -1;
+
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 145) {
+            ctx.strokeStyle = 'rgba(212,175,55,' + ((1 - dist / 145) * 0.22).toFixed(3) + ')';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+        const md = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+        if (md < 160) {
+          ctx.strokeStyle = 'rgba(246,225,164,' + ((1 - md / 160) * 0.4).toFixed(3) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.stroke();
+        }
+        ctx.fillStyle = 'rgba(246,225,164,0.68)';
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+})();
+
+/* 3. CURSOR SPOTLIGHT EFFECT ON CARDS */
+document.querySelectorAll('.spotlight-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+});
+
+/* 4. INTERACTIVE HERO TELEMETRY TRACK SWITCHER */
+let _activeHeroTrack = 'tajweed';
+const HERO_TRACK_DATA = {
+  tajweed: {
+    pct: 72,
+    en: {
+      tag: 'Makharij & Sifaat Precision',
+      meta: 'Verified post-lesson report after every class',
+      lessons: [
+        { ico: '📖', nm: 'Makharij al-Huroof', mt: 'Tajweed · Lesson 3 of 8 · Completed', done: true },
+        { ico: '✍️', nm: 'Sifaat al-Huroof', mt: 'Tajweed · Lesson 4 of 8 · Completed', done: true },
+        { ico: '🎯', nm: 'Ahkam al-Noon al-Sakinah', mt: 'Tajweed · Module 5 · Up Next', done: false }
+      ]
+    },
+    ar: {
+      tag: 'دقّة المخارج والصفات',
+      meta: 'تقرير متابعة موثّق يصلك فور نهاية كل حصة',
+      lessons: [
+        { ico: '📖', nm: 'مخارج الحروف الأساسية', mt: 'التجويد · الدرس 3 من 8 · مكتمل', done: true },
+        { ico: '✍️', nm: 'صفات الحروف والتفخيم', mt: 'التجويد · الدرس 4 من 8 · مكتمل', done: true },
+        { ico: '🎯', nm: 'أحكام النون الساكنة والتنوين', mt: 'التجويد · الوحدة 5 · التالي', done: false }
+      ]
+    }
+  },
+  hifz: {
+    pct: 86,
+    en: {
+      tag: 'Structured Hifz & Muraja\'ah',
+      meta: 'New memorisation balanced with daily retention cycles',
+      lessons: [
+        { ico: '🌙', nm: 'Surah Al-Mulk (1–30)', mt: 'Hifz · Verified Mastery · Completed', done: true },
+        { ico: '🔄', nm: 'Juz\' Amma Cumulative Review', mt: 'Muraja\'ah · 98% Accuracy · Completed', done: true },
+        { ico: '🌟', nm: 'Surah Al-Qalam (1–20)', mt: 'Hifz · Assigned Target · Up Next', done: false }
+      ]
+    },
+    ar: {
+      tag: 'حفظ متقن ومراجعة تراكمية',
+      meta: 'توازن دقيق بين الحفظ الجديد والمراجعة القريبة والبعيدة',
+      lessons: [
+        { ico: '🌙', nm: 'سورة الملك (1–30)', mt: 'حفظ جديد · إتقان موثّق · مكتمل', done: true },
+        { ico: '🔄', nm: 'مراجعة شاملة لجزء عمّ', mt: 'مراجعة · دقة 98% · مكتمل', done: true },
+        { ico: '🌟', nm: 'سورة القلم (1–20)', mt: 'الحفظ القادم · الهدف التالي', done: false }
+      ]
+    }
+  },
+  arabic: {
+    pct: 64,
+    en: {
+      tag: 'Noor Al-Bayan & Qur\'anic Arabic',
+      meta: 'From Arabic script to understanding Qur\'anic roots',
+      lessons: [
+        { ico: '🔤', nm: 'Noor Al-Bayan Vowel Fluency', mt: 'Reading · Stage 2 · Completed', done: true },
+        { ico: '🌿', nm: '300 High-Frequency Qur\'anic Roots', mt: 'Vocabulary · Unit 4 · Completed', done: true },
+        { ico: '📜', nm: 'Qur\'anic Sentence Structure', mt: 'Grammar · Module 2 · Up Next', done: false }
+      ]
+    },
+    ar: {
+      tag: 'نور البيان والعربية القرآنية',
+      meta: 'من إتقان الحروف والقرائية إلى فهم جذور ألفاظ القرآن',
+      lessons: [
+        { ico: '🔤', nm: 'إتقان القراءة بمنهج نور البيان', mt: 'القرائية · المرحلة 2 · مكتمل', done: true },
+        { ico: '🌿', nm: 'أكثر 300 جذر قرآني تكرارًا', mt: 'المفردات · الوحدة 4 · مكتمل', done: true },
+        { ico: '📜', nm: 'تراكيب الجملة في القرآن الكريم', mt: 'النحو القرآني · الوحدة 2 · التالي', done: false }
+      ]
+    }
+  }
+};
+
+function renderHeroTrack(key) {
+  const safeKey = HERO_TRACK_DATA[key] ? key : 'tajweed';
+  _activeHeroTrack = safeKey;
+  const lang = window._QAA_LANG === 'ar' ? 'ar' : 'en';
+  const entry = HERO_TRACK_DATA[safeKey];
+  const copy = entry[lang] || entry.en;
+
+  document.querySelectorAll('.hcard-tab').forEach(b => {
+    b.classList.toggle('active', b.dataset.htrack === safeKey);
+  });
+
+  const circumference = 238.76;
+  const offset = circumference - (circumference * entry.pct) / 100;
+  const arc = document.getElementById('heroRingArc');
+  if (arc) arc.style.strokeDashoffset = offset.toFixed(2);
+  const ringPct = document.getElementById('heroRingPct');
+  if (ringPct) ringPct.textContent = entry.pct + '%';
+  const barPct = document.getElementById('heroBarPct');
+  if (barPct) barPct.textContent = entry.pct + '%';
+  const barFill = document.getElementById('heroBarFill');
+  if (barFill) barFill.style.width = entry.pct + '%';
+  const tagEl = document.getElementById('heroTrackTag');
+  if (tagEl) tagEl.textContent = copy.tag;
+  const metaEl = document.getElementById('heroTrackMeta');
+  if (metaEl) metaEl.textContent = copy.meta;
+
+  const list = document.getElementById('heroLessonList');
+  if (list) {
+    list.innerHTML = copy.lessons.map(l => (
+      '<div class="lesson-row' + (l.done ? ' done' : '') + '">' +
+        '<div class="lesson-ico">' + l.ico + '</div>' +
+        '<div class="lesson-info">' +
+          '<div class="lesson-nm">' + l.nm + '</div>' +
+          '<div class="lesson-mt">' + l.mt + '</div>' +
+        '</div>' +
+        '<div class="check-circle">' + (l.done ? '✓' : '') + '</div>' +
+      '</div>'
+    )).join('');
+  }
+}
+
+function switchHeroTrack(key, btn) {
+  renderHeroTrack(key);
+  if (btn) btn.blur();
+}
+
+/* 5. INTERACTIVE 4-STAGE MASTERY ROADMAP INFOGRAPHIC */
+let _activeRoadmapStage = 0;
+const ROADMAP_STAGES = [
+  {
+    en: {
+      badge: 'Stage 01 · Diagnostic Architecture',
+      title: '20–30 Min Live Diagnostic & Perfect Tutor Match',
+      desc: 'We evaluate reading clarity, Makharij articulation, memorisation history, and family schedule — then pair each learner (from age 2+ to adults) with an Ijazah-certified male or female instructor.',
+      metrics: [
+        { k: 'Ages 2+ to Adults', v: 'Tailored pedagogy' },
+        { k: 'Male & Female Tutors', v: '100% Ijazah-certified' },
+        { k: '48-Hour Roadmap', v: 'Written study plan' }
+      ],
+      cta: 'Book Stage 01 Diagnostic ↗',
+      next: 'Explore Stage 02 →'
+    },
+    ar: {
+      badge: 'المرحلة 01 · التشخيص الدقيق',
+      title: 'جلسة تقييم حيّة (20–30 دقيقة) واختيار المعلم الأنسب',
+      desc: 'نُشخّص مستوى القراءة ومخارج الحروف والهدف الدراسي ووقت الأسرة، ثم نُرشّح لكل طالب (من عمر سنتين حتى الكبار) معلمًا أو معلمة مجازة تناسب شخصيته ومستواه.',
+      metrics: [
+        { k: 'من عمر سنتين للكبار', v: 'منهجية مناسبة للعمر' },
+        { k: 'معلمون ومعلمات مجازون', v: 'كفاءة علمية معتمدة' },
+        { k: 'خطة مكتوبة خلال 48 ساعة', v: 'مسار واضح منذ اليوم الأول' }
+      ],
+      cta: 'احجز تقييم المرحلة الأولى ↗',
+      next: 'استعرض المرحلة 02 ←'
+    },
+    svg: '<svg viewBox="0 0 320 220" fill="none">' +
+      '<rect x="20" y="24" width="280" height="172" rx="18" fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.4)" stroke-width="1.4"/>' +
+      '<circle cx="90" cy="110" r="44" stroke="#D4AF37" stroke-width="2" stroke-dasharray="5 4"/>' +
+      '<circle cx="90" cy="110" r="28" fill="rgba(212,175,55,0.16)" stroke="#f6e1a4" stroke-width="1.5"/>' +
+      '<text x="90" y="115" text-anchor="middle" fill="#f6e1a4" font-size="14" font-weight="800">20-30m</text>' +
+      '<rect x="154" y="56" width="122" height="20" rx="10" fill="rgba(255,255,255,0.1)"/>' +
+      '<rect x="154" y="56" width="96" height="20" rx="10" fill="#D4AF37"/>' +
+      '<rect x="154" y="92" width="122" height="20" rx="10" fill="rgba(255,255,255,0.1)"/>' +
+      '<rect x="154" y="92" width="112" height="20" rx="10" fill="#34d399"/>' +
+      '<rect x="154" y="128" width="122" height="20" rx="10" fill="rgba(255,255,255,0.1)"/>' +
+      '<rect x="154" y="128" width="84" height="20" rx="10" fill="#f6e1a4"/>' +
+      '<text x="160" y="172" fill="rgba(255,255,255,0.75)" font-size="10.5" font-weight="600">Makharij · Pace · Tutor Match</text>' +
+    '</svg>'
+  },
+  {
+    en: {
+      badge: 'Stage 02 · Foundation Precision',
+      title: 'Noor Al-Bayan, Al-Qaida & Crystal-Clear Articulation',
+      desc: 'Build unshakeable Arabic reading fluency from scratch using proven Noor Al-Bayan and Al-Qaida Al-Nooraniyyah methodology alongside our forthcoming proprietary Quraan Arabi curriculum.',
+      metrics: [
+        { k: 'Noor Al-Bayan & Qaida', v: 'Proven reading system' },
+        { k: '30 or 60 Min', v: 'Age-optimized sessions' },
+        { k: 'Parent Portal Reports', v: 'After every single class' }
+      ],
+      cta: 'Explore Foundation Path ↗',
+      next: 'Explore Stage 03 →'
+    },
+    ar: {
+      badge: 'المرحلة 02 · التأسيس المتين',
+      title: 'نور البيان والقاعدة النورانية وإتقان مخارج الحروف',
+      desc: 'تأسيس راسخ للقراءة العربية السليمة من الصفر باستخدام منهجَي نور البيان والقاعدة النورانية بجانب منهج أكاديمية قرآن عربي الخاص في القرائية والتجويد والثقافة الإسلامية.',
+      metrics: [
+        { k: 'نور البيان والنورانية', v: 'تأسيس علمي مجرّب' },
+        { k: 'حصص 30 أو 60 دقيقة', v: 'مرونة تناسب كل عمر' },
+        { k: 'تقرير فوري بعد كل حصة', v: 'متابعة كاملة لولي الأمر' }
+      ],
+      cta: 'ابدأ مسار التأسيس ↗',
+      next: 'استعرض المرحلة 03 ←'
+    },
+    svg: '<svg viewBox="0 0 320 220" fill="none">' +
+      '<rect x="26" y="34" width="82" height="152" rx="14" fill="rgba(255,255,255,0.08)" stroke="rgba(212,175,55,0.45)"/>' +
+      '<rect x="119" y="24" width="82" height="162" rx="14" fill="rgba(212,175,55,0.16)" stroke="#D4AF37" stroke-width="1.8"/>' +
+      '<rect x="212" y="34" width="82" height="152" rx="14" fill="rgba(255,255,255,0.08)" stroke="rgba(212,175,55,0.45)"/>' +
+      '<text x="67" y="96" text-anchor="middle" fill="#f6e1a4" font-size="26" font-family="Amiri, serif">أ ب ت</text>' +
+      '<text x="67" y="132" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">LETTERS</text>' +
+      '<text x="160" y="94" text-anchor="middle" fill="#f6e1a4" font-size="28" font-family="Amiri, serif">بِسْمِ</text>' +
+      '<text x="160" y="132" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">FLUENCY</text>' +
+      '<text x="253" y="96" text-anchor="middle" fill="#34d399" font-size="26" font-family="Amiri, serif">تجويد</text>' +
+      '<text x="253" y="132" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">TAJWEED</text>' +
+      '<path d="M98 158 H222" stroke="#D4AF37" stroke-width="2" stroke-dasharray="4 4"/>' +
+    '</svg>'
+  },
+  {
+    en: {
+      badge: 'Stage 03 · Accelerated Fluency & Hifz',
+      title: 'Structured Memorisation, Revision & Portal Telemetry',
+      desc: 'Commit to 3–5 weekly sessions with balanced Hifz + Muraja\'ah ratios, live 1-on-1 correction, transparent Parent Portal tracking, and serial-numbered milestone certificates.',
+      metrics: [
+        { k: '3–5× Weekly Pace', v: 'Momentum without burnout' },
+        { k: 'Smart Revision Cycles', v: 'Strong long-term retention' },
+        { k: 'Verified Certificates', v: 'Unique serial IDs' }
+      ],
+      cta: 'Explore Fluency Path ↗',
+      next: 'Explore Stage 04 →'
+    },
+    ar: {
+      badge: 'المرحلة 03 · الطلاقة والحفظ المتقن',
+      title: 'حفظ منظّم ومراجعة ثابتة ومتابعة رقمية بعد كل درس',
+      desc: 'التزام بـ 3 إلى 5 حصص أسبوعيًا بتوازن ذكي بين الحفظ الجديد والمراجعة القريبة والبعيدة، مع متابعة فورية من بوابة ولي الأمر وشهادات إنجاز معتمدة برقم تسلسلي.',
+      metrics: [
+        { k: '3 إلى 5 حصص أسبوعيًا', v: 'تقدّم سريع بلا إرهاق' },
+        { k: 'دورة مراجعة منتظمة', v: 'تثبيت طويل الأمد للسور' },
+        { k: 'شهادات برقم تسلسلي', v: 'موثّقة وقابلة للطباعة' }
+      ],
+      cta: 'اكتشف مسار الإتقان ↗',
+      next: 'استعرض المرحلة 04 ←'
+    },
+    svg: '<svg viewBox="0 0 320 220" fill="none">' +
+      '<circle cx="160" cy="110" r="76" stroke="rgba(255,255,255,0.12)" stroke-width="14"/>' +
+      '<circle cx="160" cy="110" r="76" stroke="#D4AF37" stroke-width="14" stroke-linecap="round" stroke-dasharray="477" stroke-dashoffset="110" transform="rotate(-90 160 110)"/>' +
+      '<circle cx="160" cy="110" r="54" stroke="#34d399" stroke-width="6" stroke-dasharray="339" stroke-dashoffset="70" transform="rotate(-90 160 110)"/>' +
+      '<text x="160" y="106" text-anchor="middle" fill="#f6e1a4" font-size="24" font-weight="800">30 JUZ</text>' +
+      '<text x="160" y="128" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11" font-weight="600">Hifz · Muraja\'ah · Itqan</text>' +
+    '</svg>'
+  },
+  {
+    en: {
+      badge: 'Stage 04 · Scholarly Transmission',
+      title: 'Founder\'s Ijazah Track & Unbroken Sanad Certification',
+      desc: 'Direct selective mentorship under Mentor Mohamed Abdul-Maqsoud in Riwayat Hafs \'an \'Asim (expanding to the Seven Qira\'at) — culminating in a formal Ijazah with an unbroken chain to the Prophet ﷺ.',
+      metrics: [
+        { k: 'Hafs \'an \'Asim', v: '7 Qira\'at expanding' },
+        { k: 'Unbroken Sanad', v: 'Direct Founder oversight' },
+        { k: 'By Application Only', v: 'Mastery over speed' }
+      ],
+      cta: 'Apply for Ijazah Track ↗',
+      next: 'Back to Stage 01 ↺'
+    },
+    ar: {
+      badge: 'المرحلة 04 · السند المتصل والإجازة',
+      title: 'مسار الإجازة بالسند تحت إشراف Mentor Mohamed Abdul-Maqsoud',
+      desc: 'إرشاد علمي نخبوي مباشر في رواية حفص عن عاصم (ومستقبلًا القراءات السبع خلال عامين)، يُتوَّج بإجازة قرآنية رسمية بسندٍ متصل إلى النبي ﷺ عند بلوغ الإتقان الكامل.',
+      metrics: [
+        { k: 'رواية حفص عن عاصم', v: 'والتوسع للقراءات السبع' },
+        { k: 'سند متصل معتمد', v: 'إشراف مباشر من المؤسس' },
+        { k: 'بالقبول والتقديم فقط', v: 'المعيار هو الإتقان التام' }
+      ],
+      cta: 'التقديم لمسار الإجازة ↗',
+      next: 'العودة للمرحلة 01 ↺'
+    },
+    svg: '<svg viewBox="0 0 320 220" fill="none">' +
+      '<line x1="50" y1="110" x2="270" y2="110" stroke="#D4AF37" stroke-width="2.2" stroke-dasharray="5 4"/>' +
+      '<circle cx="64" cy="110" r="18" fill="rgba(212,175,55,0.18)" stroke="#D4AF37" stroke-width="2"/>' +
+      '<circle cx="128" cy="110" r="18" fill="rgba(212,175,55,0.22)" stroke="#D4AF37" stroke-width="2"/>' +
+      '<circle cx="192" cy="110" r="18" fill="rgba(212,175,55,0.28)" stroke="#D4AF37" stroke-width="2"/>' +
+      '<circle cx="256" cy="110" r="26" fill="rgba(212,175,55,0.28)" stroke="#f6e1a4" stroke-width="2.6"/>' +
+      '<text x="256" y="116" text-anchor="middle" fill="#f6e1a4" font-size="14" font-weight="800">سند</text>' +
+      '<text x="160" y="54" text-anchor="middle" fill="#f6e1a4" font-size="12" font-weight="700">UNBROKEN CHAIN · SANAD</text>' +
+      '<text x="160" y="172" text-anchor="middle" fill="rgba(255,255,255,0.78)" font-size="11">Scholarly Trust · Formal Ijazah Seal</text>' +
+    '</svg>'
+  }
+];
+
+function selectRoadmapStage(idx) {
+  const safeIdx = Math.max(0, Math.min(ROADMAP_STAGES.length - 1, Number(idx) || 0));
+  _activeRoadmapStage = safeIdx;
+  const lang = window._QAA_LANG === 'ar' ? 'ar' : 'en';
+  const stage = ROADMAP_STAGES[safeIdx];
+  const copy = stage[lang] || stage.en;
+
+  const fill = document.getElementById('roadmapRailFill');
+  if (fill) fill.style.width = ((safeIdx / (ROADMAP_STAGES.length - 1)) * 100) + '%';
+
+  document.querySelectorAll('.rm-node').forEach(node => {
+    const n = Number(node.dataset.stage);
+    node.classList.toggle('active', n === safeIdx);
+    node.classList.toggle('done', n < safeIdx);
+  });
+
+  const vp = document.getElementById('roadmapVisualPane');
+  if (vp) vp.innerHTML = stage.svg;
+  const badge = document.getElementById('roadmapStageBadge');
+  if (badge) badge.textContent = copy.badge;
+  const title = document.getElementById('roadmapStageTitle');
+  if (title) title.textContent = copy.title;
+  const desc = document.getElementById('roadmapStageDesc');
+  if (desc) desc.textContent = copy.desc;
+  const cta = document.getElementById('roadmapStageCta');
+  if (cta) {
+    cta.textContent = copy.cta;
+    cta.href = safeIdx === 3 ? 'quraanic-transformation.html' : '#placement';
+  }
+  const nxt = document.getElementById('roadmapNextBtn');
+  if (nxt) nxt.textContent = copy.next;
+
+  const metricsEl = document.getElementById('roadmapStageMetrics');
+  if (metricsEl) {
+    metricsEl.innerHTML = copy.metrics.map(m => (
+      '<div class="rm-metric-chip"><strong>' + m.k + '</strong><span>' + m.v + '</span></div>'
+    )).join('');
+  }
+}
+
+function nextRoadmapStage() {
+  selectRoadmapStage((_activeRoadmapStage + 1) % ROADMAP_STAGES.length);
+}
+
+/* 6. INTERACTIVE GLOBAL REACH TELEMETRY MAP + ANIMATED COUNTERS */
+let _activeReachHub = 'cairo';
+const REACH_HUBS = {
+  cairo: {
+    tz: 'Africa/Cairo',
+    en: { title: '🇪🇬 Cairo, Egypt — Academy HQ', desc: 'Al-Azhar scholarly roots · Certified male & female Ijazah tutors teaching live 24/7 (excluding Cairo Friday Prayer).' },
+    ar: { title: '🇪🇬 القاهرة، مصر — مقر الأكاديمية', desc: 'جذور علمية أزهرية · معلمون ومعلمات مجازون يدرّسون مباشرة 24/7 (ما عدا وقت صلاة الجمعة في مصر).' }
+  },
+  usa: {
+    tz: 'America/New_York',
+    en: { title: '🇺🇸 United States (EST · CST · MST · PST)', desc: 'All 4 US time zones auto-synchronized with Cairo across DST shifts — ideal after-school & weekend slots.' },
+    ar: { title: '🇺🇸 الولايات المتحدة (4 مناطق زمنية)', desc: 'تغطية شاملة لشرق ووسط وغرب أمريكا بمزامنة تلقائية عند تغيير الساعة الصيفي والشتوي.' }
+  },
+  uk: {
+    tz: 'Europe/London',
+    en: { title: '🇬🇧 United Kingdom (London · Manchester · Birmingham)', desc: 'Seamless 1–2 hour difference with Cairo — favourite after-school slots for British Muslim families.' },
+    ar: { title: '🇬🇧 المملكة المتحدة (لندن · مانشستر · برمنغهام)', desc: 'فارق توقيت مثالي مع القاهرة (ساعة إلى ساعتين) ومواعيد مسائية مريحة جدًا لأسر بريطانيا.' }
+  },
+  canada: {
+    tz: 'America/Toronto',
+    en: { title: '🇨🇦 Canada (Toronto · Ottawa · Calgary · Vancouver)', desc: 'Full bilingual English & Arabic instruction for Canadian children (ages 2+) and adults.' },
+    ar: { title: '🇨🇦 كندا (تورنتو · أوتاوا · كالغاري · فانكوفر)', desc: 'برامج ثنائية اللغة بالكامل لأطفال وأسر كندا من عمر سنتين وحتى الكبار.' }
+  },
+  europe: {
+    tz: 'Europe/Berlin',
+    en: { title: '🇪🇺 Europe (France · Germany · Netherlands · Scandinavia)', desc: 'Zero-conflict scheduling synced with Central European Time and private Hub-and-Spoke family privacy.' },
+    ar: { title: '🇪🇺 أوروبا (فرنسا · ألمانيا · هولندا · الدول الإسكندنافية)', desc: 'مواعيد دقيقة متوافقة مع توقيت وسط أوروبا مع خصوصية كاملة للأسر والمعلمين.' }
+  },
+  gulf: {
+    tz: 'Asia/Riyadh',
+    en: { title: '🇸🇦 Gulf & Arab World (KSA · UAE · Kuwait · Qatar · Jordan)', desc: 'Immediate timezone harmony (+0 to +2h from Cairo) with structured Hifz, Tajweed & Ijazah tracks.' },
+    ar: { title: '🇸🇦 الخليج والعالم العربي (السعودية · الإمارات · الكويت · قطر · الأردن)', desc: 'توافق زمني شبه تام مع القاهرة وبرامج متكاملة للحفظ والتجويد ومسار الإجازة.' }
+  },
+  asia: {
+    tz: 'Asia/Kuala_Lumpur',
+    en: { title: '🇲🇾 Southeast Asia (Malaysia · Singapore)', desc: 'Morning & evening live 1-on-1 sessions tailored to Kuala Lumpur & Singapore school schedules.' },
+    ar: { title: '🇲🇾 جنوب شرق آسيا (ماليزيا · سنغافورة)', desc: 'حصص فردية مباشرة صباحية ومسائية متوافقة مع جداول مدارس ماليزيا وسنغافورة.' }
+  },
+  australia: {
+    tz: 'Australia/Sydney',
+    en: { title: '🇦🇺 Australia (Sydney · Melbourne)', desc: '24/7 Academy operations mean Australian families enjoy dedicated after-school & morning Fajr slots.' },
+    ar: { title: '🇦🇺 أستراليا (سيدني · ملبورن)', desc: 'بفضل عمل الأكاديمية 24/7 تحصل أسر أستراليا على مواعيد مريحة بعد المدرسة أو بعد الفجر.' }
+  }
+};
+
+function selectReachHub(key) {
+  const safeKey = REACH_HUBS[key] ? key : 'cairo';
+  _activeReachHub = safeKey;
+  const lang = window._QAA_LANG === 'ar' ? 'ar' : 'en';
+  const hub = REACH_HUBS[safeKey];
+  const copy = hub[lang] || hub.en;
+
+  document.querySelectorAll('.map-hub, .rh-pill').forEach(el => {
+    el.classList.toggle('active', el.dataset.hub === safeKey);
+  });
+  const tEl = document.getElementById('rrTitle');
+  const dEl = document.getElementById('rrDesc');
+  const cEl = document.getElementById('rrClock');
+  if (tEl) tEl.textContent = copy.title;
+  if (dEl) dEl.textContent = copy.desc;
+  if (cEl) {
+    try {
+      const nowStr = new Intl.DateTimeFormat('en-US', {
+        timeZone: hub.tz, hour: '2-digit', minute: '2-digit', hour12: true
+      }).format(new Date());
+      cEl.textContent = (lang === 'ar' ? 'الآن: ' : 'Live: ') + nowStr;
+    } catch (_) {
+      cEl.textContent = '24/7 Live';
+    }
+  }
+}
+
+// Refresh active region live clock every 30s
+setInterval(() => {
+  if (document.getElementById('rrClock')) selectReachHub(_activeReachHub);
+}, 30000);
+
+// Animated scroll count-up for KPI numbers
+(function initCountUps() {
+  const els = document.querySelectorAll('.count-up[data-target]');
+  if (!els.length || !('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.dataset.target, 10);
+      if (isNaN(target)) return;
+      obs.unobserve(el);
+      const start = performance.now();
+      const dur = 1100;
+      const step = now => {
+        const p = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased).toLocaleString('en-US');
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }, { threshold: 0.35 });
+  els.forEach(el => obs.observe(el));
+})();
+
+/* 7. INTERACTIVE FAMILY SAVINGS INFOGRAPHIC CALCULATOR */
+let _calcMode = 'sib2';
+let _calcDur = '60';
+let _calcFreq = 2;
+
+const CALC_PRICES = {
+  '60': { 1: 52, 2: 96, 3: 126, 4: 152, 5: 170 },
+  '30': { 1: 36, 2: 64, 3: 87,  4: 104, 5: 120 }
+};
+
+function setCalcMode(mode, btn) {
+  _calcMode = mode;
+  document.querySelectorAll('.fc-pill').forEach(b => b.classList.toggle('active', b === btn));
+  updateFamilyCalculator();
+}
+
+function setCalcDur(dur, btn) {
+  _calcDur = dur;
+  document.querySelectorAll('.fc-dur').forEach(b => b.classList.toggle('active', b === btn));
+  updateFamilyCalculator();
+}
+
+function setCalcFreq(freq, btn) {
+  _calcFreq = Math.max(1, Math.min(5, Number(freq) || 2));
+  document.querySelectorAll('.fc-freq').forEach(b => b.classList.toggle('active', b === btn));
+  updateFamilyCalculator();
+}
+
+function updateFamilyCalculator() {
+  const lang = window._QAA_LANG === 'ar' ? 'ar' : 'en';
+  const basePerPlan = (CALC_PRICES[_calcDur] && CALC_PRICES[_calcDur][_calcFreq]) || 96;
+  const hasRef = Boolean(document.getElementById('fcRefCheck') && document.getElementById('fcRefCheck').checked);
+
+  // Sync frequency button labels for EN/AR
+  document.querySelectorAll('.fc-freq').forEach(b => {
+    const f = Number(b.dataset.freq);
+    b.textContent = lang === 'ar' ? (f + '×/أسبوع') : (f + '×/wk');
+  });
+
+  const rows = [];
+  let stdTotal = 0;
+  let famTotal = 0;
+
+  if (_calcMode === 'sib2') {
+    const p1 = basePerPlan;
+    const p2 = +(basePerPlan * 0.90).toFixed(2);
+    stdTotal = basePerPlan * 2;
+    famTotal = p1 + p2;
+    rows.push({
+      label: lang === 'ar' ? 'الطفل الأول' : '1st Child',
+      badge: lang === 'ar' ? 'السعر الأساسي' : 'Standard',
+      isStd: true, orig: basePerPlan, final: p1
+    });
+    rows.push({
+      label: lang === 'ar' ? 'الطفل الثاني' : '2nd Child',
+      badge: lang === 'ar' ? 'خصم 10%' : '10% OFF',
+      isStd: false, orig: basePerPlan, final: p2
+    });
+  } else if (_calcMode === 'sib3') {
+    const p1 = basePerPlan;
+    const p2 = +(basePerPlan * 0.90).toFixed(2);
+    const p3 = +(basePerPlan * 0.85).toFixed(2);
+    stdTotal = basePerPlan * 3;
+    famTotal = p1 + p2 + p3;
+    rows.push({
+      label: lang === 'ar' ? 'الطفل الأول' : '1st Child',
+      badge: lang === 'ar' ? 'السعر الأساسي' : 'Standard',
+      isStd: true, orig: basePerPlan, final: p1
+    });
+    rows.push({
+      label: lang === 'ar' ? 'الطفل الثاني' : '2nd Child',
+      badge: lang === 'ar' ? 'خصم 10%' : '10% OFF',
+      isStd: false, orig: basePerPlan, final: p2
+    });
+    rows.push({
+      label: lang === 'ar' ? 'الطفل الثالث' : '3rd Child',
+      badge: lang === 'ar' ? 'خصم 15%' : '15% OFF',
+      isStd: false, orig: basePerPlan, final: p3
+    });
+  } else {
+    const pParent = +(basePerPlan * 0.80).toFixed(2);
+    const pChild  = +(basePerPlan * 0.85).toFixed(2);
+    stdTotal = basePerPlan * 2;
+    famTotal = pParent + pChild;
+    rows.push({
+      label: lang === 'ar' ? 'باقة ولي الأمر' : 'Parent Plan',
+      badge: lang === 'ar' ? 'خصم 20%' : '20% OFF',
+      isStd: false, orig: basePerPlan, final: pParent
+    });
+    rows.push({
+      label: lang === 'ar' ? 'باقة الطفل' : 'Child Plan',
+      badge: lang === 'ar' ? 'خصم 15%' : '15% OFF',
+      isStd: false, orig: basePerPlan, final: pChild
+    });
+  }
+
+  const refExtraFirstMonth = hasRef ? +(famTotal * 0.10).toFixed(2) : 0;
+  const displayFamPrice = Math.round(famTotal - refExtraFirstMonth);
+  const monthlySaved = Math.round(stdTotal - famTotal);
+  const firstMonthSaved = Math.round(stdTotal - (famTotal - refExtraFirstMonth));
+  const annualSaved = Math.round((stdTotal - famTotal) * 12 + refExtraFirstMonth);
+  const ratioPct = Math.max(40, Math.min(100, Math.round(((famTotal - refExtraFirstMonth) / stdTotal) * 100)));
+
+  const fmtUsd = v => '$' + (Number.isInteger(v) ? v : v.toFixed(2).replace(/\.00$/, ''));
+
+  const bdEl = document.getElementById('fcBreakdown');
+  if (bdEl) {
+    let html = rows.map(r => (
+      '<div class="fc-bd-row">' +
+        '<div class="fc-bd-left"><strong>' + r.label + '</strong><span class="fc-bd-badge' + (r.isStd ? ' std' : '') + '">' + r.badge + '</span></div>' +
+        '<div class="fc-bd-price">' +
+          (!r.isStd ? '<span class="fc-bd-strike">' + fmtUsd(r.orig) + '</span>' : '') +
+          '<span>' + fmtUsd(r.final) + (lang === 'ar' ? '/شهر' : '/mo') + '</span>' +
+        '</div>' +
+      '</div>'
+    )).join('');
+    if (hasRef) {
+      html += '<div class="fc-bd-row">' +
+        '<div class="fc-bd-left"><strong>' + (lang === 'ar' ? 'مكافأة كود الإحالة (الشهر الأول)' : 'Referral Bonus (1st Month)') + '</strong><span class="fc-bd-badge">-10%</span></div>' +
+        '<div class="fc-bd-price" style="color:#0f7a52;">-' + fmtUsd(refExtraFirstMonth) + '</div>' +
+      '</div>';
+    }
+    bdEl.innerHTML = html;
+  }
+
+  const stdEl = document.getElementById('fcStdPrice');
+  const famEl = document.getElementById('fcFamPrice');
+  const barEl = document.getElementById('fcFamBar');
+  const saveEl = document.getElementById('fcSaveText');
+
+  if (stdEl) stdEl.textContent = '$' + stdTotal + (lang === 'ar' ? '/شهر' : '/mo');
+  if (famEl) famEl.textContent = '$' + displayFamPrice + (lang === 'ar' ? '/شهر' : '/mo');
+  if (barEl) barEl.style.width = ratioPct + '%';
+  if (saveEl) {
+    if (lang === 'ar') {
+      saveEl.textContent = 'توفير $' + (hasRef ? firstMonthSaved : monthlySaved) + (hasRef ? ' أول شهر' : '/شهر') + ' · $' + annualSaved + ' سنويًا';
+    } else {
+      saveEl.textContent = '$' + (hasRef ? firstMonthSaved : monthlySaved) + (hasRef ? ' (1st mo)' : '/mo') + ' · $' + annualSaved + '/year saved';
+    }
+  }
+}
+
+function applyCalculatorToForm() {
+  if (_calcMode === 'pc') {
+    if (typeof activateFamilyMode === 'function') activateFamilyMode('parent-child');
+  } else {
+    if (typeof activateFamilyMode === 'function') activateFamilyMode('siblings');
+    const targetChildren = _calcMode === 'sib3' ? 3 : 2;
+    const countEl = document.getElementById('childrenCount');
+    const hidEl = document.getElementById('f_children_count');
+    if (countEl) countEl.textContent = String(targetChildren);
+    if (hidEl) hidEl.value = String(targetChildren);
+  }
+  const durSel = document.getElementById('f_session_duration');
+  const planSel = document.getElementById('f_plan');
+  const pathPrefix = _calcFreq <= 2 ? 'foundation' : 'fluency';
+  const planVal = pathPrefix + '-' + _calcDur + '-' + _calcFreq;
+  if (durSel) {
+    durSel.value = _calcDur;
+    syncSessionToPlans(_calcDur);
+    markField(durSel, true);
+  }
+  if (planSel) {
+    planSel.value = planVal;
+    markField(planSel, true);
+  }
+}
+
+// Initialize saved language preference + all interactive architectural widgets cleanly (zero TDZ)
+if (typeof window._QAA_LANG === 'string') {
+  setLang(window._QAA_LANG);
+} else {
+  renderHeroTrack('tajweed');
+  selectRoadmapStage(0);
+  selectReachHub('cairo');
+  updateFamilyCalculator();
 }

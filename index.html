@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="scroll-progress-bar" id="scrollProgressBar" aria-hidden="true"></div>
 
 <!-- ══ TOP BAR ══ -->
 <div class="top-bar">
@@ -127,8 +128,18 @@
 <!-- ══ HERO ══ -->
 <section class="hero">
   <div class="hero-bg"></div>
+  <canvas id="heroGeoCanvas" class="hero-geo-canvas" aria-hidden="true"></canvas>
   <div class="hero-pattern"></div>
   <div class="hero-ring"></div>
+  <!-- Architectural Rotating Islamic Geometric Astrolabe -->
+  <svg class="hero-astrolabe" viewBox="0 0 420 420" fill="none" aria-hidden="true">
+    <circle cx="210" cy="210" r="196" stroke="#D4AF37" stroke-opacity="0.16" stroke-width="1" stroke-dasharray="4 7"/>
+    <circle cx="210" cy="210" r="154" stroke="#D4AF37" stroke-opacity="0.12" stroke-width="1"/>
+    <polygon points="210,22 252,110 348,96 294,176 378,228 286,256 300,352 210,300 120,352 134,256 42,228 126,176 72,96 168,110" stroke="#D4AF37" stroke-opacity="0.14" stroke-width="1"/>
+    <rect x="96" y="96" width="228" height="228" stroke="#D4AF37" stroke-opacity="0.13" stroke-width="1"/>
+    <rect x="96" y="96" width="228" height="228" stroke="#D4AF37" stroke-opacity="0.13" stroke-width="1" transform="rotate(45 210 210)"/>
+    <circle cx="210" cy="210" r="64" stroke="#D4AF37" stroke-opacity="0.2" stroke-width="1"/>
+  </svg>
   <div class="container">
     <div class="hero-inner">
       <div>
@@ -145,7 +156,7 @@
         <p data-i18n="hero.desc">Structured Arabic and Qur'anic programs designed for the modern student. No confusion — just measurable, verified progress.</p>
         <div class="hero-ctas">
           <a href="#placement" class="btn btn-gold" data-i18n="hero.cta1">Placement Evaluation ↗</a>
-          <a href="#pedigree" class="btn btn-ghost" data-i18n="hero.cta2">Explore the Academy</a>
+          <a href="#roadmap" class="btn btn-ghost" data-i18n="hero.cta2">Explore the Academy</a>
         </div>
         <div class="hero-stats">
           <div>
@@ -167,12 +178,47 @@
         </div>
       </div>
       <div>
-        <div class="hero-card">
+        <div class="hero-card hero-card-interactive">
           <div class="hcard-head">
-            <div class="hcard-title" data-i18n="hero.card_title">Your Study Dashboard</div>
-            <div class="hcard-badge" data-i18n="hero.card_badge">In Progress</div>
+            <div>
+              <div class="hcard-title" data-i18n="hero.card_title">Your Study Dashboard</div>
+              <div class="hcard-live-sub"><span class="hcard-live-dot"></span> 1-on-1 Live Classroom · Portal Sync</div>
+            </div>
+            <div class="hcard-badge" data-i18n="hero.card_badge">Live Portal Preview</div>
           </div>
-          <div class="lesson-list">
+          <!-- Interactive Track Preview Tabs -->
+          <div class="hcard-tabs" role="tablist" aria-label="Interactive curriculum preview">
+            <button type="button" class="hcard-tab active" data-htrack="tajweed" onclick="switchHeroTrack('tajweed', this)" data-i18n="hero.tab_tajweed">Tajweed</button>
+            <button type="button" class="hcard-tab" data-htrack="hifz" onclick="switchHeroTrack('hifz', this)" data-i18n="hero.tab_hifz">Hifz</button>
+            <button type="button" class="hcard-tab" data-htrack="arabic" onclick="switchHeroTrack('arabic', this)" data-i18n="hero.tab_arabic">Arabic</button>
+          </div>
+          <!-- Interactive SVG Mastery Ring + Lessons -->
+          <div class="hcard-visual-row">
+            <div class="hcard-ring-wrap">
+              <svg class="hcard-ring-svg" viewBox="0 0 96 96" aria-hidden="true">
+                <circle cx="48" cy="48" r="38" stroke="rgba(255,255,255,0.12)" stroke-width="6.5" fill="none"/>
+                <circle id="heroRingArc" cx="48" cy="48" r="38" stroke="url(#goldRingGrad)" stroke-width="6.5" stroke-linecap="round" fill="none" stroke-dasharray="238.76" stroke-dashoffset="66.85" transform="rotate(-90 48 48)"/>
+                <defs>
+                  <linearGradient id="goldRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#f6e1a4"/>
+                    <stop offset="100%" stop-color="#D4AF37"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="hcard-ring-val">
+                <span id="heroRingPct">72%</span>
+                <small data-i18n="hero.card_prog">Mastery Score</small>
+              </div>
+            </div>
+            <div class="hcard-wave-box" aria-hidden="true">
+              <div class="hcard-wave-lbl" id="heroTrackTag">Makharij &amp; Sifaat</div>
+              <div class="hcard-wave-bars">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="hcard-wave-meta" id="heroTrackMeta">Verified post-lesson report after every class</div>
+            </div>
+          </div>
+          <div class="lesson-list" id="heroLessonList">
             <div class="lesson-row done">
               <div class="lesson-ico">📖</div>
               <div class="lesson-info">
@@ -192,18 +238,18 @@
             <div class="lesson-row">
               <div class="lesson-ico">🎯</div>
               <div class="lesson-info">
-                <div class="lesson-nm">Arabic Verb Conjugation</div>
-                <div class="lesson-mt">Grammar · Module 1 · Next</div>
+                <div class="lesson-nm">Ahkam al-Noon al-Sakinah</div>
+                <div class="lesson-mt">Tajweed · Module 5 · Up Next</div>
               </div>
               <div class="check-circle"></div>
             </div>
           </div>
           <div class="prog-wrap">
             <div class="prog-labels">
-              <span data-i18n="hero.card_prog">Weekly Progress</span>
-              <span>72%</span>
+              <span data-i18n="hero.card_prog">Mastery Score</span>
+              <span id="heroBarPct">72%</span>
             </div>
-            <div class="prog-bar"><div class="prog-fill"></div></div>
+            <div class="prog-bar"><div class="prog-fill" id="heroBarFill" style="width:72%;"></div></div>
           </div>
         </div>
       </div>
@@ -223,20 +269,96 @@
       <p class="section-sub reveal d1" data-i18n="ped.sub">Every instructor, every lesson plan, and every program is engineered with one goal: measurable, lasting Qur'anic progress anchored in scholarly authenticity.</p>
     </div>
     <div class="pedigree-grid">
-      <div class="ped-card reveal">
-        <div class="ped-icon">🎓</div>
+      <div class="ped-card spotlight-card reveal">
+        <div class="ped-icon ped-svg-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="24" cy="24" r="21" stroke="#D4AF37" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <path d="M24 9L28 16.5L36.5 18L30.5 24L32 32.5L24 28.5L16 32.5L17.5 24L11.5 18L20 16.5L24 9Z" fill="rgba(212,175,55,0.16)" stroke="#043927" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="24" cy="22" r="3.2" fill="#D4AF37"/>
+          </svg>
+        </div>
         <h3 data-i18n="ped.c1_t">Ijazah-Certified Tutors</h3>
         <p data-i18n="ped.c1_p">Every instructor holds an unbroken chain of transmission — Sanad — back to the Prophet ﷺ. The gold standard of Qur'anic authority.</p>
       </div>
-      <div class="ped-card reveal d1">
-        <div class="ped-icon">📊</div>
+      <div class="ped-card spotlight-card reveal d1">
+        <div class="ped-icon ped-svg-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <rect x="8" y="28" width="6" height="12" rx="2" fill="#0a5c3d" opacity="0.35"/>
+            <rect x="17" y="22" width="6" height="18" rx="2" fill="#0a5c3d" opacity="0.65"/>
+            <rect x="26" y="15" width="6" height="25" rx="2" fill="#043927"/>
+            <rect x="35" y="9" width="6" height="31" rx="2" fill="#D4AF37"/>
+            <path d="M9 22L19 16L29 12L38 6" stroke="#D4AF37" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
         <h3 data-i18n="ped.c2_t">Structured Progress Reports</h3>
         <p data-i18n="ped.c2_p">Detailed lesson reports after every single class track recitation accuracy, memorisation, revision, Tajweed rules, and homework. Never guess where you stand.</p>
       </div>
-      <div class="ped-card reveal d2">
-        <div class="ped-icon">🌍</div>
+      <div class="ped-card spotlight-card reveal d2">
+        <div class="ped-icon ped-svg-icon">
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <circle cx="24" cy="24" r="16" stroke="#043927" stroke-width="1.8"/>
+            <ellipse cx="24" cy="24" rx="8" ry="16" stroke="#0a5c3d" stroke-width="1.4"/>
+            <path d="M9 19H39M9 29H39" stroke="#0a5c3d" stroke-width="1.3"/>
+            <circle cx="35" cy="14" r="4" fill="#D4AF37"/>
+            <circle cx="14" cy="33" r="3" fill="#043927"/>
+          </svg>
+        </div>
         <h3 data-i18n="ped.c3_t">Multilingual Delivery</h3>
         <p data-i18n="ped.c3_p">Programs fully delivered in English and Arabic. Every nuance of the sacred text understood with precision, regardless of background.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ INTERACTIVE 4-STAGE MASTERY ROADMAP INFOGRAPHIC ══ -->
+<section class="roadmap-sec" id="roadmap">
+  <div class="container">
+    <div class="roadmap-head reveal">
+      <div class="eyebrow" style="justify-content:center;" data-i18n="roadmap.eye">Interactive Learning Architecture</div>
+      <h2 class="section-title" style="text-align:center;" data-i18n-html="roadmap.title">From First Letter to <em>Certified Mastery.</em></h2>
+      <p class="section-sub" style="margin:12px auto 0;text-align:center;" data-i18n="roadmap.sub">Click any stage below to explore how our structured methodology transforms beginners and serious learners step by step.</p>
+    </div>
+
+    <!-- Interactive Connected 4-Node SVG Timeline -->
+    <div class="roadmap-rail-wrap reveal">
+      <div class="roadmap-rail-bg">
+        <div class="roadmap-rail-fill" id="roadmapRailFill" style="width:0%;"></div>
+      </div>
+      <div class="roadmap-nodes" role="tablist" aria-label="4-Stage Qur'anic Mastery Roadmap">
+        <button type="button" class="rm-node active" data-stage="0" onclick="selectRoadmapStage(0)">
+          <span class="rm-num">01</span>
+          <span class="rm-label" data-i18n="roadmap.s1_lbl">Diagnostic</span>
+        </button>
+        <button type="button" class="rm-node" data-stage="1" onclick="selectRoadmapStage(1)">
+          <span class="rm-num">02</span>
+          <span class="rm-label" data-i18n="roadmap.s2_lbl">Foundation</span>
+        </button>
+        <button type="button" class="rm-node" data-stage="2" onclick="selectRoadmapStage(2)">
+          <span class="rm-num">03</span>
+          <span class="rm-label" data-i18n="roadmap.s3_lbl">Fluency &amp; Hifz</span>
+        </button>
+        <button type="button" class="rm-node" data-stage="3" onclick="selectRoadmapStage(3)">
+          <span class="rm-num">04</span>
+          <span class="rm-label" data-i18n="roadmap.s4_lbl">Ijazah &amp; Sanad</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Interactive Stage Infographic Showcase -->
+    <div class="roadmap-stage-card reveal" id="roadmapStageCard">
+      <div class="rm-visual-pane" id="roadmapVisualPane" aria-hidden="true">
+        <!-- Populated dynamically with bespoke interactive SVG diagram per stage -->
+      </div>
+      <div class="rm-detail-pane">
+        <div class="rm-stage-badge" id="roadmapStageBadge">Stage 01 · Entry Architecture</div>
+        <h3 class="rm-stage-title" id="roadmapStageTitle">20–30 Min Live Diagnostic &amp; Perfect Tutor Match</h3>
+        <p class="rm-stage-desc" id="roadmapStageDesc">We evaluate reading accuracy, letter articulation (Makharij), age, and learning goals — then pair each student (ages 2+ to adults) with a certified male or female Ijazah instructor.</p>
+        <div class="rm-metrics" id="roadmapStageMetrics"></div>
+        <div class="rm-actions">
+          <a href="#placement" class="btn btn-emerald" id="roadmapStageCta">Start With Stage 01 ↗</a>
+          <button type="button" class="rm-next-btn" id="roadmapNextBtn" onclick="nextRoadmapStage()">Next Stage →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -289,6 +411,171 @@
           <a href="quraanic-transformation.html" class="btn btn-gold" data-i18n="founder.cta">Apply for the Ijazah Track ↗</a>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ GLOBAL REACH & IMPACT TELEMETRY MAP ══ -->
+<section class="global-reach" id="global-reach">
+  <div class="container">
+    <div class="reach-head reveal">
+      <div class="eyebrow" style="justify-content:center;" data-i18n="reach.eye">Global Classroom Telemetry</div>
+      <h2 class="section-title" style="text-align:center;color:#ffffff;" data-i18n-html="reach.title">One Academy HQ in Cairo.<br><em>Connected to 11+ Countries.</em></h2>
+      <p class="section-sub" style="margin:12px auto 0;text-align:center;color:rgba(255,255,255,0.72);" data-i18n="reach.sub">24/7 live 1-on-1 classes seamlessly synchronized across US, UK, Canada, Europe, Gulf, and Australia time zones — with certified male and female tutors.</p>
+    </div>
+
+    <!-- Animated Counter Stat Pillars -->
+    <div class="reach-kpis reveal">
+      <div class="rk-card">
+        <div class="rk-num"><span class="count-up" data-target="4100">4,100</span>+</div>
+        <div class="rk-lbl" data-i18n="reach.k1">Teaching Hours Delivered</div>
+      </div>
+      <div class="rk-card">
+        <div class="rk-num"><span class="count-up" data-target="11">11</span>+</div>
+        <div class="rk-lbl" data-i18n="reach.k2">Countries Worldwide</div>
+      </div>
+      <div class="rk-card">
+        <div class="rk-num"><span class="count-up" data-target="2">2</span>+ yrs</div>
+        <div class="rk-lbl" data-i18n="reach.k3">Starting Age (to Adults)</div>
+      </div>
+      <div class="rk-card">
+        <div class="rk-num">24/7</div>
+        <div class="rk-lbl" data-i18n="reach.k4">Live Global Operations</div>
+      </div>
+    </div>
+
+    <!-- Interactive Stylized World Connection Infographic Map -->
+    <div class="reach-map-shell reveal">
+      <div class="reach-map-wrap">
+        <svg class="reach-map-svg" viewBox="0 0 960 400" fill="none" role="img" aria-label="Interactive Global Student Hubs Connected to Cairo HQ">
+          <defs>
+            <radialGradient id="cairoGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.75"/>
+              <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#f6e1a4" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#D4AF37" stop-opacity="0.45"/>
+            </linearGradient>
+          </defs>
+          <!-- Subtle latitude/longitude architectural grid -->
+          <g stroke="rgba(212,175,55,0.08)" stroke-width="1">
+            <line x1="0" y1="80" x2="960" y2="80"/>
+            <line x1="0" y1="160" x2="960" y2="160"/>
+            <line x1="0" y1="240" x2="960" y2="240"/>
+            <line x1="0" y1="320" x2="960" y2="320"/>
+            <line x1="160" y1="0" x2="160" y2="400"/>
+            <line x1="320" y1="0" x2="320" y2="400"/>
+            <line x1="480" y1="0" x2="480" y2="400"/>
+            <line x1="640" y1="0" x2="640" y2="400"/>
+            <line x1="800" y1="0" x2="800" y2="400"/>
+          </g>
+          <!-- Stylized minimalist architectural continent silhouettes -->
+          <g fill="rgba(255,255,255,0.06)" stroke="rgba(212,175,55,0.18)" stroke-width="1">
+            <!-- North America -->
+            <path d="M88,92 L175,70 L252,86 L278,128 L244,174 L204,198 L168,214 L144,186 L108,168 L82,130 Z"/>
+            <!-- South America -->
+            <path d="M236,232 L286,240 L312,284 L288,354 L256,374 L238,324 L222,268 Z"/>
+            <!-- Europe -->
+            <path d="M438,84 L518,74 L574,94 L568,140 L512,152 L456,144 L434,116 Z"/>
+            <!-- Africa & Middle East -->
+            <path d="M446,164 L548,162 L614,176 L632,216 L588,244 L564,328 L516,356 L474,316 L444,234 Z"/>
+            <!-- Asia -->
+            <path d="M586,86 L748,80 L832,124 L816,192 L746,232 L668,224 L616,184 L578,136 Z"/>
+            <!-- Australia -->
+            <path d="M776,274 L868,270 L892,316 L856,354 L788,342 L768,306 Z"/>
+          </g>
+
+          <!-- Animated Golden Flight Arcs from Cairo HQ (548, 188) -->
+          <g class="reach-arcs" stroke="url(#arcGrad)" stroke-width="1.8" stroke-dasharray="6 6" fill="none">
+            <path d="M548,188 Q365,62 195,146"/>   <!-- USA -->
+            <path d="M548,188 Q390,48 228,116"/>   <!-- Canada -->
+            <path d="M548,188 Q500,115 466,118"/>  <!-- UK -->
+            <path d="M548,188 Q528,124 508,124"/>  <!-- Europe -->
+            <path d="M548,188 Q585,176 610,204"/>  <!-- Gulf / Makkah / Dubai -->
+            <path d="M548,188 Q655,156 756,232"/>  <!-- Malaysia / Singapore -->
+            <path d="M548,188 Q720,210 852,324"/>  <!-- Australia -->
+          </g>
+
+          <!-- Cairo HQ Primary Beacon -->
+          <g class="map-hub active" data-hub="cairo" onclick="selectReachHub('cairo')" style="cursor:pointer;">
+            <circle cx="548" cy="188" r="24" fill="url(#cairoGlow)"/>
+            <circle cx="548" cy="188" r="10" stroke="#D4AF37" stroke-width="1.5" opacity="0.65" class="hub-pulse"/>
+            <circle cx="548" cy="188" r="5.5" fill="#D4AF37"/>
+            <text x="548" y="213" text-anchor="middle" fill="#f6e1a4" font-size="11" font-weight="700">Cairo HQ</text>
+          </g>
+
+          <!-- USA Beacon -->
+          <g class="map-hub" data-hub="usa" onclick="selectReachHub('usa')" style="cursor:pointer;">
+            <circle cx="195" cy="146" r="12" fill="rgba(212,175,55,0.18)" class="hub-pulse"/>
+            <circle cx="195" cy="146" r="5" fill="#ffffff" stroke="#D4AF37" stroke-width="2"/>
+            <text x="195" y="168" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="600">USA (4 Zones)</text>
+          </g>
+
+          <!-- Canada Beacon -->
+          <g class="map-hub" data-hub="canada" onclick="selectReachHub('canada')" style="cursor:pointer;">
+            <circle cx="228" cy="116" r="11" fill="rgba(212,175,55,0.18)" class="hub-pulse"/>
+            <circle cx="228" cy="116" r="4.8" fill="#ffffff" stroke="#D4AF37" stroke-width="2"/>
+            <text x="228" y="102" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="600">Canada</text>
+          </g>
+
+          <!-- UK Beacon -->
+          <g class="map-hub" data-hub="uk" onclick="selectReachHub('uk')" style="cursor:pointer;">
+            <circle cx="466" cy="118" r="11" fill="rgba(212,175,55,0.18)" class="hub-pulse"/>
+            <circle cx="466" cy="118" r="4.8" fill="#ffffff" stroke="#D4AF37" stroke-width="2"/>
+            <text x="454" y="103" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="600">UK</text>
+          </g>
+
+          <!-- Europe Beacon -->
+          <g class="map-hub" data-hub="europe" onclick="selectReachHub('europe')" style="cursor:pointer;">
+            <circle cx="508" cy="124" r="10" fill="rgba(212,175,55,0.16)" class="hub-pulse"/>
+            <circle cx="508" cy="124" r="4.5" fill="#ffffff" stroke="#D4AF37" stroke-width="2"/>
+            <text x="520" y="108" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="600">Europe</text>
+          </g>
+
+          <!-- Gulf Beacon -->
+          <g class="map-hub" data-hub="gulf" onclick="selectReachHub('gulf')" style="cursor:pointer;">
+            <circle cx="610" cy="204" r="11" fill="rgba(212,175,55,0.18)" class="hub-pulse"/>
+            <circle cx="610" cy="204" r="4.8" fill="#ffffff" stroke="#D4AF37" stroke-width="2"/>
+            <text x="628" y="223" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="600">Gulf &amp; Arab</text>
+          </g>
+
+          <!-- Asia Beacon -->
+          <g class="map-hub" data-hub="asia" onclick="selectReachHub('asia')" style="cursor:pointer;">
+            <circle cx="756" cy="232" r="10" fill="rgba(212,175,55,0.16)" class="hub-pulse"/>
+            <circle cx="756" cy="232" r="4.5" fill="#ffffff" stroke="#D4AF37" stroke-width="2"/>
+            <text x="756" y="252" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="600">SE Asia</text>
+          </g>
+
+          <!-- Australia Beacon -->
+          <g class="map-hub" data-hub="australia" onclick="selectReachHub('australia')" style="cursor:pointer;">
+            <circle cx="852" cy="324" r="11" fill="rgba(212,175,55,0.18)" class="hub-pulse"/>
+            <circle cx="852" cy="324" r="4.8" fill="#ffffff" stroke="#D4AF37" stroke-width="2"/>
+            <text x="852" y="346" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="600">Australia</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Quick Region Pills + Live Telemetry Readout -->
+      <div class="reach-hub-pills" role="tablist" aria-label="Select global region">
+        <button type="button" class="rh-pill active" data-hub="cairo" onclick="selectReachHub('cairo')">🇪🇬 Cairo HQ</button>
+        <button type="button" class="rh-pill" data-hub="usa" onclick="selectReachHub('usa')">🇺🇸 USA</button>
+        <button type="button" class="rh-pill" data-hub="uk" onclick="selectReachHub('uk')">🇬🇧 UK</button>
+        <button type="button" class="rh-pill" data-hub="canada" onclick="selectReachHub('canada')">🇨🇦 Canada</button>
+        <button type="button" class="rh-pill" data-hub="europe" onclick="selectReachHub('europe')">🇪🇺 Europe</button>
+        <button type="button" class="rh-pill" data-hub="gulf" onclick="selectReachHub('gulf')">🇸🇦 Gulf</button>
+        <button type="button" class="rh-pill" data-hub="asia" onclick="selectReachHub('asia')">🇲🇾 SE Asia</button>
+        <button type="button" class="rh-pill" data-hub="australia" onclick="selectReachHub('australia')">🇦🇺 Australia</button>
+      </div>
+      <div class="reach-readout" id="reachReadout">
+        <div class="rr-left">
+          <strong id="rrTitle">🇪🇬 Cairo, Egypt — Academy HQ</strong>
+          <span id="rrDesc">Al-Azhar scholarly roots · Certified male &amp; female Ijazah tutors teaching live 24/7 (excluding Cairo Friday Prayer).</span>
+        </div>
+        <div class="rr-right" id="rrClock">--:--</div>
+      </div>
+      <div class="reach-hint" data-i18n="reach.hint">Tap any glowing beacon on the map to inspect timezone &amp; tutor availability</div>
     </div>
   </div>
 </section>
@@ -460,6 +747,67 @@
       <div class="eyebrow" data-i18n="disc.eye">More Than a Lesson — A Family Legacy</div>
       <h2 data-i18n-html="disc.title">When a Family Learns Together,<br><em>They Grow Together.</em></h2>
       <p data-i18n="disc.sub">We believe Qur'anic education is a family affair — not just a transaction. That's why we've built a programme that rewards families who commit together, because the impact multiplies when everyone grows.</p>
+    </div>
+
+    <!-- INTERACTIVE FAMILY SAVINGS INFOGRAPHIC CALCULATOR -->
+    <div class="family-calc-card reveal" id="familyCalc">
+      <div class="fc-left">
+        <div class="fc-eyebrow" data-i18n="calc.eyebrow">Interactive Savings Infographic</div>
+        <h3 class="fc-title" data-i18n="calc.title">Estimate Your Family Monthly Savings</h3>
+
+        <div class="fc-step-lbl" data-i18n="calc.s1">1. Who is enrolling?</div>
+        <div class="fc-pill-row" role="group" aria-label="Family setup">
+          <button type="button" class="fc-pill active" data-mode="sib2" onclick="setCalcMode('sib2', this)" data-i18n="calc.m_sib2">2 Children</button>
+          <button type="button" class="fc-pill" data-mode="sib3" onclick="setCalcMode('sib3', this)" data-i18n="calc.m_sib3">3 Children</button>
+          <button type="button" class="fc-pill" data-mode="pc" onclick="setCalcMode('pc', this)" data-i18n="calc.m_pc">Parent + Child</button>
+        </div>
+
+        <div class="fc-step-lbl" data-i18n="calc.s2">2. Session length &amp; weekly frequency</div>
+        <div class="fc-sub-controls">
+          <div class="fc-dur-wrap">
+            <button type="button" class="fc-dur active" data-dur="60" onclick="setCalcDur('60', this)" data-i18n="calc.d60">60 min</button>
+            <button type="button" class="fc-dur" data-dur="30" onclick="setCalcDur('30', this)" data-i18n="calc.d30">30 min</button>
+          </div>
+          <div class="fc-freq-wrap" role="group" aria-label="Sessions per week">
+            <button type="button" class="fc-freq" data-freq="1" onclick="setCalcFreq(1, this)">1×/wk</button>
+            <button type="button" class="fc-freq active" data-freq="2" onclick="setCalcFreq(2, this)">2×/wk</button>
+            <button type="button" class="fc-freq" data-freq="3" onclick="setCalcFreq(3, this)">3×/wk</button>
+            <button type="button" class="fc-freq" data-freq="4" onclick="setCalcFreq(4, this)">4×/wk</button>
+            <button type="button" class="fc-freq" data-freq="5" onclick="setCalcFreq(5, this)">5×/wk</button>
+          </div>
+          <label class="fc-ref-toggle">
+            <input type="checkbox" id="fcRefCheck" onchange="updateFamilyCalculator()">
+            <span data-i18n="calc.ref_lbl">+ Referral Code (10% off 1st month)</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="fc-right">
+        <!-- Crystal-clear Per-Member Price Breakdown -->
+        <div class="fc-breakdown" id="fcBreakdown"></div>
+
+        <div class="fc-bar-group">
+          <div class="fc-bar-head">
+            <span data-i18n="calc.std_lbl">Standard Total</span>
+            <strong id="fcStdPrice">$192/mo</strong>
+          </div>
+          <div class="fc-bar-track"><div class="fc-bar-fill fc-bar-std" style="width:100%;"></div></div>
+        </div>
+        <div class="fc-bar-group">
+          <div class="fc-bar-head">
+            <span data-i18n="calc.fam_lbl">Your Family Rate</span>
+            <strong id="fcFamPrice" class="fc-emerald-val">$182/mo</strong>
+          </div>
+          <div class="fc-bar-track"><div class="fc-bar-fill fc-bar-fam" id="fcFamBar" style="width:94%;"></div></div>
+        </div>
+        <div class="fc-save-strip">
+          <div>
+            <div class="fc-save-lbl" data-i18n="calc.save_lbl">Estimated Savings</div>
+            <div class="fc-save-val" id="fcSaveText">$10/mo · $120/year saved</div>
+          </div>
+          <a href="#placement" class="btn btn-gold fc-cta" id="fcApplyBtn" onclick="applyCalculatorToForm()" data-i18n="calc.cta">Apply This Family Plan →</a>
+        </div>
+      </div>
     </div>
 
     <div class="discounts-grid">
@@ -860,7 +1208,7 @@
             </div>
             <div class="form-field">
               <label>Age <span class="req-star">*</span></label>
-              <input id="f_age" type="number" min="5" max="100" placeholder="e.g. 28" required>
+              <input id="f_age" type="number" min="2" max="100" placeholder="e.g. 28" required>
             </div>
           </div>
           <div class="form-field">
